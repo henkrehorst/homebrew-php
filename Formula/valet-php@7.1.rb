@@ -1,21 +1,21 @@
-class Php < Formula
+class ValetPhpAT71 < Formula
   desc "General-purpose scripting language"
   homepage "https://secure.php.net/"
-  url "https://php.net/get/php-7.3.0.tar.xz/from/this/mirror"
-  sha256 "7d195cad55af8b288c3919c67023a14ff870a73e3acc2165a6d17a4850a560b5"
-  revision 1
+  url "https://php.net/get/php-7.1.25.tar.xz/from/this/mirror"
+  sha256 "0fd8dad1903cd0b2d615a1fe4209f99e53b7292403c8ffa1919c0f4dd1eada88"
 
   bottle do
-    sha256 "74ba1ffaa12631b3413617915d8de0ab54e9714530ba31530e228580cc91327a" => :mojave
-    sha256 "99bd809cc18678667bc12c516dd9d11fbaa38e2b873b19654dee70b6a3364ab8" => :high_sierra
-    sha256 "7e6bd74a51cb710e3bd0b6b125f59343911b85e1eabffe5e716b49b91b7d57c6" => :sierra
+    sha256 "46df1961981fe57c163921f5ac363c1bcf2063993f654c45e7f7c731683bae56" => :mojave
+    sha256 "deee221834493c7dd87c0759c9ab3916f499a9761bb036270736b240f85c50f1" => :high_sierra
+    sha256 "fb1973b3ce2b9dde48ddd330052a25e72e37be13cd601b8a326bfc508db117ee" => :sierra
   end
+
+  keg_only :versioned_formula
 
   depends_on "httpd" => [:build, :test]
   depends_on "pkg-config" => :build
   depends_on "apr"
   depends_on "apr-util"
-  depends_on "argon2"
   depends_on "aspell"
   depends_on "autoconf"
   depends_on "curl-openssl"
@@ -28,11 +28,12 @@ class Php < Formula
   depends_on "jpeg"
   depends_on "libpng"
   depends_on "libpq"
-  depends_on "libsodium"
+  depends_on "libtool"
   depends_on "libzip"
+  depends_on "mcrypt"
   depends_on "openldap"
   depends_on "openssl"
-  depends_on "pcre2"
+  depends_on "pcre"
   depends_on "sqlite"
   depends_on "tidy-html5"
   depends_on "unixodbc"
@@ -60,6 +61,9 @@ class Php < Formula
               "APXS_LIBEXECDIR='$(INSTALL_ROOT)#{lib}/httpd/modules'"
       s.gsub! "-z `$APXS -q SYSCONFDIR`",
               "-z ''"
+      # apxs will interpolate the @ in the versioned prefix: https://bz.apache.org/bugzilla/show_bug.cgi?id=61944
+      s.gsub! "LIBEXECDIR='$APXS_LIBEXECDIR'",
+              "LIBEXECDIR='" + "#{lib}/httpd/modules".gsub("@", "\\@") + "'"
     end
 
     # Update error message in apache sapi to better explain the requirements
@@ -135,15 +139,15 @@ class Php < Formula
       --with-layout=GNU
       --with-ldap=#{Formula["openldap"].opt_prefix}
       --with-ldap-sasl#{headers_path}
-      --with-libxml-dir#{headers_path}
       --with-libedit#{headers_path}
+      --with-libxml-dir#{headers_path}
       --with-libzip
+      --with-mcrypt=#{Formula["mcrypt"].opt_prefix}
       --with-mhash#{headers_path}
       --with-mysql-sock=/tmp/mysql.sock
       --with-mysqli=mysqlnd
       --with-ndbm#{headers_path}
       --with-openssl=#{Formula["openssl"].opt_prefix}
-      --with-password-argon2=#{Formula["argon2"].opt_prefix}
       --with-pdo-dblib=#{Formula["freetds"].opt_prefix}
       --with-pdo-mysql=mysqlnd
       --with-pdo-odbc=unixODBC,#{Formula["unixodbc"].opt_prefix}
@@ -153,7 +157,6 @@ class Php < Formula
       --with-pic
       --with-png-dir=#{Formula["libpng"].opt_prefix}
       --with-pspell=#{Formula["aspell"].opt_prefix}
-      --with-sodium=#{Formula["libsodium"].opt_prefix}
       --with-sqlite3=#{Formula["sqlite"].opt_prefix}
       --with-tidy=#{Formula["tidy-html5"].opt_prefix}
       --with-unixODBC=#{Formula["unixodbc"].opt_prefix}
@@ -218,7 +221,7 @@ class Php < Formula
     php_ext_dir = opt_prefix/"lib/php"/php_basename
 
     # fix pear config to install outside cellar
-    pear_path = HOMEBREW_PREFIX/"share/pear"
+    pear_path = HOMEBREW_PREFIX/"share/pear@#{php_version}"
     cp_r pkgshare/"pear/.", pear_path
     {
         "php_ini"  => etc/"php/#{php_version}/php.ini",

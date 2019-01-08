@@ -1,22 +1,21 @@
-class PhpAT70 < Formula
+class ValetPhpAT73 < Formula
   desc "General-purpose scripting language"
   homepage "https://secure.php.net/"
-  url "https://php.net/get/php-7.0.32.tar.xz/from/this/mirror"
-  sha256 "ff6f62afeb32c71b3b89ecbd42950ef6c5e0c329cc6e1c58ffac47e6f1f883c4"
-  revision 2
+  url "https://php.net/get/php-7.3.0.tar.xz/from/this/mirror"
+  sha256 "7d195cad55af8b288c3919c67023a14ff870a73e3acc2165a6d17a4850a560b5"
+  revision 1
 
   bottle do
-    sha256 "690f494debe1a4c0959f9d8ad2e994b805e5ccf599facf7ef6389e49e20a0083" => :mojave
-    sha256 "c78c6fdf10de0b2c0cf3d513d74248676d421e3a00306cd18db2174bd82058b1" => :high_sierra
-    sha256 "9f3b8dd88c1dc6bbcd1de60bbaadccd5d28a73043c115a49f9f3e742c647ab83" => :sierra
+    sha256 "74ba1ffaa12631b3413617915d8de0ab54e9714530ba31530e228580cc91327a" => :mojave
+    sha256 "99bd809cc18678667bc12c516dd9d11fbaa38e2b873b19654dee70b6a3364ab8" => :high_sierra
+    sha256 "7e6bd74a51cb710e3bd0b6b125f59343911b85e1eabffe5e716b49b91b7d57c6" => :sierra
   end
-
-  keg_only :versioned_formula
 
   depends_on "httpd" => [:build, :test]
   depends_on "pkg-config" => :build
   depends_on "apr"
   depends_on "apr-util"
+  depends_on "argon2"
   depends_on "aspell"
   depends_on "autoconf"
   depends_on "curl-openssl"
@@ -29,12 +28,11 @@ class PhpAT70 < Formula
   depends_on "jpeg"
   depends_on "libpng"
   depends_on "libpq"
-  depends_on "libtool"
+  depends_on "libsodium"
   depends_on "libzip"
-  depends_on "mcrypt"
   depends_on "openldap"
   depends_on "openssl"
-  depends_on "pcre"
+  depends_on "pcre2"
   depends_on "sqlite"
   depends_on "tidy-html5"
   depends_on "unixodbc"
@@ -62,9 +60,6 @@ class PhpAT70 < Formula
               "APXS_LIBEXECDIR='$(INSTALL_ROOT)#{lib}/httpd/modules'"
       s.gsub! "-z `$APXS -q SYSCONFDIR`",
               "-z ''"
-      # apxs will interpolate the @ in the versioned prefix: https://bz.apache.org/bugzilla/show_bug.cgi?id=61944
-      s.gsub! "LIBEXECDIR='$APXS_LIBEXECDIR'",
-              "LIBEXECDIR='" + "#{lib}/httpd/modules".gsub("@", "\\@") + "'"
     end
 
     # Update error message in apache sapi to better explain the requirements
@@ -80,14 +75,8 @@ class PhpAT70 < Formula
 
     inreplace "sapi/fpm/php-fpm.conf.in", ";daemonize = yes", "daemonize = no"
 
-    # API compatibility with tidy-html5 v5.0.0 - https://github.com/htacg/tidy-html5/issues/224
-    inreplace "ext/tidy/tidy.c", "buffio.h", "tidybuffio.h"
-
     # Required due to icu4c dependency
     ENV.cxx11
-
-    # icu4c 61.1 compatability
-    ENV.append "CPPFLAGS", "-DU_USING_ICU_NAMESPACE=1"
 
     config_path = etc/"php/#{php_version}"
     # Prevent system pear config from inhibiting pear install
@@ -146,15 +135,15 @@ class PhpAT70 < Formula
       --with-layout=GNU
       --with-ldap=#{Formula["openldap"].opt_prefix}
       --with-ldap-sasl#{headers_path}
-      --with-libedit#{headers_path}
       --with-libxml-dir#{headers_path}
+      --with-libedit#{headers_path}
       --with-libzip
-      --with-mcrypt=#{Formula["mcrypt"].opt_prefix}
       --with-mhash#{headers_path}
       --with-mysql-sock=/tmp/mysql.sock
       --with-mysqli=mysqlnd
       --with-ndbm#{headers_path}
       --with-openssl=#{Formula["openssl"].opt_prefix}
+      --with-password-argon2=#{Formula["argon2"].opt_prefix}
       --with-pdo-dblib=#{Formula["freetds"].opt_prefix}
       --with-pdo-mysql=mysqlnd
       --with-pdo-odbc=unixODBC,#{Formula["unixodbc"].opt_prefix}
@@ -164,6 +153,7 @@ class PhpAT70 < Formula
       --with-pic
       --with-png-dir=#{Formula["libpng"].opt_prefix}
       --with-pspell=#{Formula["aspell"].opt_prefix}
+      --with-sodium=#{Formula["libsodium"].opt_prefix}
       --with-sqlite3=#{Formula["sqlite"].opt_prefix}
       --with-tidy=#{Formula["tidy-html5"].opt_prefix}
       --with-unixODBC=#{Formula["unixodbc"].opt_prefix}
@@ -228,7 +218,7 @@ class PhpAT70 < Formula
     php_ext_dir = opt_prefix/"lib/php"/php_basename
 
     # fix pear config to install outside cellar
-    pear_path = HOMEBREW_PREFIX/"share/pear@#{php_version}"
+    pear_path = HOMEBREW_PREFIX/"share/pear"
     cp_r pkgshare/"pear/.", pear_path
     {
         "php_ini"  => etc/"php/#{php_version}/php.ini",

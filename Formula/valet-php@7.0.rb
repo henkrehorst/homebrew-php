@@ -1,13 +1,14 @@
-class PhpAT72 < Formula
+class ValetPhpAT70 < Formula
   desc "General-purpose scripting language"
   homepage "https://secure.php.net/"
-  url "https://php.net/get/php-7.2.13.tar.xz/from/this/mirror"
-  sha256 "14b0429abdb46b65c843e5882c9a8c46b31dfbf279c747293b8ab950c2644a4b"
+  url "https://php.net/get/php-7.0.32.tar.xz/from/this/mirror"
+  sha256 "ff6f62afeb32c71b3b89ecbd42950ef6c5e0c329cc6e1c58ffac47e6f1f883c4"
+  revision 2
 
   bottle do
-    sha256 "6dfcf4baffb4a9b929725a69d6d162dcf38f403788ef45740a2572cb1b610765" => :mojave
-    sha256 "30f1ada91bee7fe2fb2ee69ce6b7714dae947f2fafe8a408ca4e19b2d4e5d3da" => :high_sierra
-    sha256 "7a1c6d536b23d1c2fc06b17ada65c8d62ad56cf4304b3f1fdb41dd66db48e38b" => :sierra
+    sha256 "690f494debe1a4c0959f9d8ad2e994b805e5ccf599facf7ef6389e49e20a0083" => :mojave
+    sha256 "c78c6fdf10de0b2c0cf3d513d74248676d421e3a00306cd18db2174bd82058b1" => :high_sierra
+    sha256 "9f3b8dd88c1dc6bbcd1de60bbaadccd5d28a73043c115a49f9f3e742c647ab83" => :sierra
   end
 
   keg_only :versioned_formula
@@ -16,7 +17,6 @@ class PhpAT72 < Formula
   depends_on "pkg-config" => :build
   depends_on "apr"
   depends_on "apr-util"
-  depends_on "argon2"
   depends_on "aspell"
   depends_on "autoconf"
   depends_on "curl-openssl"
@@ -29,8 +29,9 @@ class PhpAT72 < Formula
   depends_on "jpeg"
   depends_on "libpng"
   depends_on "libpq"
-  depends_on "libsodium"
+  depends_on "libtool"
   depends_on "libzip"
+  depends_on "mcrypt"
   depends_on "openldap"
   depends_on "openssl"
   depends_on "pcre"
@@ -61,7 +62,6 @@ class PhpAT72 < Formula
               "APXS_LIBEXECDIR='$(INSTALL_ROOT)#{lib}/httpd/modules'"
       s.gsub! "-z `$APXS -q SYSCONFDIR`",
               "-z ''"
-
       # apxs will interpolate the @ in the versioned prefix: https://bz.apache.org/bugzilla/show_bug.cgi?id=61944
       s.gsub! "LIBEXECDIR='$APXS_LIBEXECDIR'",
               "LIBEXECDIR='" + "#{lib}/httpd/modules".gsub("@", "\\@") + "'"
@@ -80,8 +80,14 @@ class PhpAT72 < Formula
 
     inreplace "sapi/fpm/php-fpm.conf.in", ";daemonize = yes", "daemonize = no"
 
+    # API compatibility with tidy-html5 v5.0.0 - https://github.com/htacg/tidy-html5/issues/224
+    inreplace "ext/tidy/tidy.c", "buffio.h", "tidybuffio.h"
+
     # Required due to icu4c dependency
     ENV.cxx11
+
+    # icu4c 61.1 compatability
+    ENV.append "CPPFLAGS", "-DU_USING_ICU_NAMESPACE=1"
 
     config_path = etc/"php/#{php_version}"
     # Prevent system pear config from inhibiting pear install
@@ -140,15 +146,15 @@ class PhpAT72 < Formula
       --with-layout=GNU
       --with-ldap=#{Formula["openldap"].opt_prefix}
       --with-ldap-sasl#{headers_path}
-      --with-libxml-dir#{headers_path}
       --with-libedit#{headers_path}
+      --with-libxml-dir#{headers_path}
       --with-libzip
+      --with-mcrypt=#{Formula["mcrypt"].opt_prefix}
       --with-mhash#{headers_path}
       --with-mysql-sock=/tmp/mysql.sock
       --with-mysqli=mysqlnd
       --with-ndbm#{headers_path}
       --with-openssl=#{Formula["openssl"].opt_prefix}
-      --with-password-argon2=#{Formula["argon2"].opt_prefix}
       --with-pdo-dblib=#{Formula["freetds"].opt_prefix}
       --with-pdo-mysql=mysqlnd
       --with-pdo-odbc=unixODBC,#{Formula["unixodbc"].opt_prefix}
@@ -158,7 +164,6 @@ class PhpAT72 < Formula
       --with-pic
       --with-png-dir=#{Formula["libpng"].opt_prefix}
       --with-pspell=#{Formula["aspell"].opt_prefix}
-      --with-sodium=#{Formula["libsodium"].opt_prefix}
       --with-sqlite3=#{Formula["sqlite"].opt_prefix}
       --with-tidy=#{Formula["tidy-html5"].opt_prefix}
       --with-unixODBC=#{Formula["unixodbc"].opt_prefix}
