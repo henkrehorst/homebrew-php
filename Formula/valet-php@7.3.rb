@@ -3,13 +3,14 @@ class ValetPhpAT73 < Formula
   homepage "https://secure.php.net/"
   url "https://php.net/get/php-7.3.0.tar.xz/from/this/mirror"
   sha256 "7d195cad55af8b288c3919c67023a14ff870a73e3acc2165a6d17a4850a560b5"
-  revision 1
 
   bottle do
     sha256 "74ba1ffaa12631b3413617915d8de0ab54e9714530ba31530e228580cc91327a" => :mojave
     sha256 "99bd809cc18678667bc12c516dd9d11fbaa38e2b873b19654dee70b6a3364ab8" => :high_sierra
     sha256 "7e6bd74a51cb710e3bd0b6b125f59343911b85e1eabffe5e716b49b91b7d57c6" => :sierra
   end
+
+  keg_only :versioned_formula
 
   depends_on "httpd" => [:build, :test]
   depends_on "pkg-config" => :build
