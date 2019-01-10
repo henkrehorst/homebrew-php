@@ -1,0 +1,9 @@
+osx_instance:
+  image: mojave-base
+
+php56-task:
+  script:
+    - brew tap henkrehorst/homebrew-php
+    - brew install --build-bottle valet-php@5.6
+    - brew bottle valet-php@5.6
+    - ls -all
