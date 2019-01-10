@@ -4,6 +4,8 @@ osx_instance:
 php56-task:
   script:
     - brew tap henkrehorst/homebrew-php
+    - brew update
+    - brew install curl-openssl
     - brew install --build-bottle valet-php@5.6
     - brew bottle valet-php@5.6
     - ls -all
