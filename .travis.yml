@@ -1,14 +1,9 @@
-osx_image: xcode10.1
-addons:
-  homebrew:
-    taps: henkrehorst/homebrew-php
-    packages:
-      - curl-openssl
-    update: true
-
 jobs:
   include:
     - stage: php@7.1_high_sierra
+      osx_image: xcode10
+      before_script:
+        - brew update
       script:
         - brew install --build-bottle valet-php@7.1
         - brew bottle valet-php@7.1
