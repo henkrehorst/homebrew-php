@@ -2,9 +2,11 @@ jobs:
   include:
     - stage: php@7.1_high_sierra
       osx_image: xcode10
-      before_script:
-        - brew update
+      addons:
+        homebrew:
+          update: true
       script:
+        - brew tap henkrehorst/homebrew-php
         - brew install --build-bottle valet-php@7.1
         - brew bottle valet-php@7.1
         - ls -all
