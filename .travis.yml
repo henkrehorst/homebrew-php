@@ -4,7 +4,7 @@ addons:
   homebrew:
     update: true
 script:
-  - brew tap henkrehorst/homebrew-php
-  - travis_wait 30 brew install --build-bottle valet-php@7.1
-  - brew bottle valet-php@7.1
-  - ls -all
+  -brew tap henkrehorst/homebrew-php
+    - brew install --verbose --build-bottle valet-php@7.1
+    - brew bottle valet-php@7.1 | pbcopy
+    - ls -all
