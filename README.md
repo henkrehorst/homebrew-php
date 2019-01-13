@@ -12,4 +12,4 @@ To add tap, run `brew tap henkrehorst/homebrew-php`
 <li>php@7.3</li>
 </ul>
 
-<h4>☕ Take your time 15-20 minutes compiling first time ☕</h4>
+<h4>🚀Now pre-compiled downloads available for sierra and high sierra🚀</h4>
