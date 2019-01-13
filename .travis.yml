@@ -55,15 +55,15 @@ jobs:
         - PHPV=7.2
         - OS=high_sierra
       script: ./scripts/travisbuild
-    - stage: php 7.2
+    - stage: php 7.3
       osx_image: xcode10
       env:
-        - PHPV=7.2
+        - PHPV=7.3
         - OS=sierra
       script: ./scripts/travisbuild
-    - stage: php 7.2
+    - stage: php 7.3
       osx_image: xcode9.2
       env:
-        - PHPV=7.2
+        - PHPV=7.3
         - OS=high_sierra
       script: ./scripts/travisbuild
