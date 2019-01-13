@@ -1,17 +1,37 @@
 os: osx
-osx_image: xcode10
+osx_image:
+  - xcode10
+  - xcode9.2
 addons:
   homebrew:
     update: true
-script:
-  - brew tap henkrehorst/homebrew-php
-  - brew install --verbose --build-bottle valet-php@7.1
-  - brew bottle valet-php@7.1 --json
-#  Get bottle data for transfer to bintray
-  - brew install jq
-  - bottleJson=$( cat *.json )
-  - FILENAME=$(echo $bottleJson | jq --raw-output '."henkrehorst/php/valet-php@7.1"."bottle".tags.high_sierra.filename')
-  - LOCALFILE=$(echo $bottleJson | jq --raw-output '."henkrehorst/php/valet-php@7.1"."bottle".tags.high_sierra.local_filename')
-#  Transfer to bintray
-  - curl -T $LOCALFILE -uhenkrehorst:$BINTRAY_KEY https://api.bintray.com/content/henkrehorst/homebrew-php/valet-php/valet-php/$FILENAME
-  - curl -T *.json -uhenkrehorst:$BINTRAY_KEY https://api.bintray.com/content/henkrehorst/homebrew-php/valet-php/valet-php/valet-php@7.1
+jobs:
+  include:
+    - stage: php 7.1
+      osx_image: xcode10
+      script:
+        - brew tap henkrehorst/homebrew-php
+        - brew install --verbose --build-bottle valet-php@7.1
+        - brew bottle valet-php@7.1 --json
+#          Get bottle data for transfer to bintray
+        - brew install jq
+        - bottleJson=$( cat *.json )
+        - FILENAME=$(echo $bottleJson | jq --raw-output '."henkrehorst/php/valet-php@7.1"."bottle".tags.high_sierra.filename')
+        - LOCALFILE=$(echo $bottleJson | jq --raw-output '."henkrehorst/php/valet-php@7.1"."bottle".tags.high_sierra.local_filename')
+#          Transfer to bintray
+        - curl -T $LOCALFILE -uhenkrehorst:$BINTRAY_KEY https://api.bintray.com/content/henkrehorst/homebrew-php/valet-php/valet-php/$FILENAME
+        - curl -T *.json -uhenkrehorst:$BINTRAY_KEY https://api.bintray.com/content/henkrehorst/homebrew-php/valet-php/valet-php/valet-php@7.1.heigh_sierra.json
+    - stage: php 7.1
+      osx_image: xcode9.2
+      script:
+        - brew tap henkrehorst/homebrew-php
+        - brew install --verbose --build-bottle valet-php@7.1
+        - brew bottle valet-php@7.1 --json
+        #          Get bottle data for transfer to bintray
+        - brew install jq
+        - bottleJson=$( cat *.json )
+        - FILENAME=$(echo $bottleJson | jq --raw-output '."henkrehorst/php/valet-php@7.1"."bottle".tags.sierra.filename')
+        - LOCALFILE=$(echo $bottleJson | jq --raw-output '."henkrehorst/php/valet-php@7.1"."bottle".tags.sierra.local_filename')
+        #          Transfer to bintray
+        - curl -T $LOCALFILE -uhenkrehorst:$BINTRAY_KEY https://api.bintray.com/content/henkrehorst/homebrew-php/valet-php/valet-php/$FILENAME
+        - curl -T *.json -uhenkrehorst:$BINTRAY_KEY https://api.bintray.com/content/henkrehorst/homebrew-php/valet-php/valet-php/valet-php@7.1.siera.json
