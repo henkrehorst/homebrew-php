@@ -8,7 +8,7 @@ script:
   - brew install --verbose --build-bottle valet-php@7.1
   - brew bottle valet-php@7.1 --json
 #  Get bottle data for transfer to bintray
-  - brew install pq
+  - brew install jq
   - bottleJson=$( cat *.json )
   - FILENAME=$(echo $bottleJson | jq --raw-output '."henkrehorst/php/valet-php@7.1"."bottle".tags.high_sierra.filename')
   - LOCALFILE=$(echo $bottleJson | jq --raw-output '."henkrehorst/php/valet-php@7.1"."bottle".tags.high_sierra.local_filename')
