@@ -248,7 +248,7 @@ class ValetPhpAT56 < Formula
     %w[
       opcache
     ].each do |e|
-      ext_config_path = etc/"valet-php#{php_version}/conf.d/ext-#{e}.ini"
+      ext_config_path = etc/"valet-php/#{php_version}/conf.d/ext-#{e}.ini"
       extension_type = (e == "opcache") ? "zend_extension" : "extension"
       if ext_config_path.exist?
         inreplace ext_config_path,

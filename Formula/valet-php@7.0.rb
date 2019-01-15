@@ -91,7 +91,7 @@ class ValetPhpAT70 < Formula
     # icu4c 61.1 compatability
     ENV.append "CPPFLAGS", "-DU_USING_ICU_NAMESPACE=1"
 
-    config_path = etc/"valet-php#{php_version}"
+    config_path = etc/"valet-php/#{php_version}"
     # Prevent system pear config from inhibiting pear install
     (config_path/"pear.conf").delete if (config_path/"pear.conf").exist?
 
@@ -233,7 +233,7 @@ class ValetPhpAT70 < Formula
     pear_path = HOMEBREW_PREFIX/"share/pear@#{php_version}"
     cp_r pkgshare/"pear/.", pear_path
     {
-        "php_ini"  => etc/"valet-php#{php_version}/php.ini",
+        "php_ini"  => etc/"valet-php/#{php_version}/php.ini",
         "php_dir"  => pear_path,
         "doc_dir"  => pear_path/"doc",
         "ext_dir"  => pecl_path/php_basename,
@@ -254,7 +254,7 @@ class ValetPhpAT70 < Formula
     %w[
       opcache
     ].each do |e|
-      ext_config_path = etc/"valet-php#{php_version}/conf.d/ext-#{e}.ini"
+      ext_config_path = etc/"valet-php/#{php_version}/conf.d/ext-#{e}.ini"
       extension_type = (e == "opcache") ? "zend_extension" : "extension"
       if ext_config_path.exist?
         inreplace ext_config_path,
