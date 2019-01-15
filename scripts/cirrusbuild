@@ -13,4 +13,4 @@ echo $LOCALFILE
 ls -all
 #         Transfer to bintray
 curl -T $LOCALFILE -uhenkrehorst:$BINTRAY_KEY https://api.bintray.com/content/henkrehorst/homebrew-php/valet-php/valet-php/$FILENAME
-curl -T *.json -uhenkrehorst:$BINTRAY_KEY https://api.bintray.com/content/henkrehorst/homebrew-php/valet-php/valet-php/valet-php@$PHPV.$OS.json
+curl -T *.json -uhenkrehorst:$BINTRAY_KEY https://api.bintray.com/content/henkrehorst/homebrew-php/valet-php/valet-php/newvalet-php@$PHPV.$OS.json
