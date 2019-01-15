@@ -16,29 +16,29 @@ php70-task:
     BINTRAY_KEY: ENCRYPTED[24372acaf50191bbacfbe096c61cb97e39e483ce9ecd35d995c5dda6923c7cf2b2740addc4e4df70177748573c93d362]
   script: bash scripts/cirrusbuild
 
-php71-task:
-  osx_instance:
-    image: mojave-base
-  env:
-    PHPV: 7.1
-    OS: mojave
-    BINTRAY_KEY: ENCRYPTED[24372acaf50191bbacfbe096c61cb97e39e483ce9ecd35d995c5dda6923c7cf2b2740addc4e4df70177748573c93d362]
-  script: bash scripts/cirrusbuild
-
-php72-task:
-  osx_instance:
-    image: mojave-base
-  env:
-    PHPV: 7.2
-    OS: mojave
-    BINTRAY_KEY: ENCRYPTED[24372acaf50191bbacfbe096c61cb97e39e483ce9ecd35d995c5dda6923c7cf2b2740addc4e4df70177748573c93d362]
-  script: bash scripts/cirrusbuild
-
-#php73-task:
+#php71-task:
 #  osx_instance:
 #    image: mojave-base
 #  env:
-#    PHPV: 7.3
+#    PHPV: 7.1
 #    OS: mojave
 #    BINTRAY_KEY: ENCRYPTED[24372acaf50191bbacfbe096c61cb97e39e483ce9ecd35d995c5dda6923c7cf2b2740addc4e4df70177748573c93d362]
 #  script: bash scripts/cirrusbuild
+#
+#php72-task:
+#  osx_instance:
+#    image: mojave-base
+#  env:
+#    PHPV: 7.2
+#    OS: mojave
+#    BINTRAY_KEY: ENCRYPTED[24372acaf50191bbacfbe096c61cb97e39e483ce9ecd35d995c5dda6923c7cf2b2740addc4e4df70177748573c93d362]
+#  script: bash scripts/cirrusbuild
+
+php73-task:
+  osx_instance:
+    image: mojave-base
+  env:
+    PHPV: 7.3
+    OS: mojave
+    BINTRAY_KEY: ENCRYPTED[24372acaf50191bbacfbe096c61cb97e39e483ce9ecd35d995c5dda6923c7cf2b2740addc4e4df70177748573c93d362]
+  script: bash scripts/cirrusbuild
