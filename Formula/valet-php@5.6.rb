@@ -43,8 +43,6 @@ class ValetPhpAT56 < Formula
   # see https://github.com/php/php-src/pull/3472
   patch :DATA
 
-  needs :cxx11
-
   def install
     # Ensure that libxml2 will be detected correctly in older MacOS
     if MacOS.version == :el_capitan || MacOS.version == :sierra
@@ -81,9 +79,6 @@ class ValetPhpAT56 < Formula
 
     # API compatibility with tidy-html5 v5.0.0 - https://github.com/htacg/tidy-html5/issues/224
     inreplace "ext/tidy/tidy.c", "buffio.h", "tidybuffio.h"
-
-    # Required due to icu4c dependency
-    ENV.cxx11
 
     # icu4c 61.1 compatability
     ENV.append "CPPFLAGS", "-DU_USING_ICU_NAMESPACE=1"
