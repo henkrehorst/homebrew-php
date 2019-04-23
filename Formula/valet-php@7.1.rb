@@ -78,7 +78,8 @@ class ValetPhpAT71 < Formula
 
     inreplace "sapi/fpm/php-fpm.conf.in", ";daemonize = yes", "daemonize = no"
 
-
+    # Required due to icu4c dependency
+    ENV.cxx11
 
     config_path = etc/"valet-php/#{php_version}"
     # Prevent system pear config from inhibiting pear install
