@@ -1,7 +1,7 @@
 class ValetPhpAT73 < Formula
   desc "General-purpose scripting language"
   homepage "https://secure.php.net/"
-  url "https://php.net/get/php-7.3.2.tar.xz/from/this/mirror"
+  url "https://php.net/get/php-7.3.7.tar.xz/from/this/mirror"
   sha256 "010b868b4456644ae227d05ad236c8b0a1f57dc6320e7e5ad75e86c5baf0a9a8"
 
   bottle do
