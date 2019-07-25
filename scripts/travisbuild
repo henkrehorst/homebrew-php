@@ -1,7 +1,6 @@
 #!/bin/bash
-brew tap henkrehorst/homebrew-php
 brew install --verbose --build-bottle Formula/valet-php@"$PHPV".rb
-brew bottle valet-php@$PHPV --json
+brew bottle valet-php@$PHPV --json --force-core-tap
 #         Get bottle data for transfer to bintray
 brew install jq
 bottleJson=$( cat *.json )
