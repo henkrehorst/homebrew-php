@@ -1,14 +1,7 @@
 #!/bin/bash
 brew install --verbose --build-bottle Formula/valet-php@"$PHPV".rb
 brew bottle valet-php@$PHPV --json --force-core-tap
-#         Get bottle data for transfer to bintray
-brew install jq
-bottleJson=$( cat *.json )
-FILENAME=$(echo $bottleJson | jq --raw-output '."henkrehorst/php/valet-php@'"$PHPV"'"."bottle".tags.'"$OS"'.filename')
-echo $FILENAME
-LOCALFILE=$(echo $bottleJson | jq --raw-output '."henkrehorst/php/valet-php@'"$PHPV"'"."bottle".tags.'"$OS"'.local_filename')
-echo $LOCALFILE
 ls -all
 #         Transfer to bintray
-curl -T $LOCALFILE -uhenkrehorst:$BINTRAY_KEY https://api.bintray.com/content/henkrehorst/homebrew-php/valet-php/valet-php/$FILENAME
+curl -T *.tar.gz -uhenkrehorst:$BINTRAY_KEY https://api.bintray.com/content/henkrehorst/homebrew-php/valet-php/valet-php/$FILENAME
 curl -T *.json -uhenkrehorst:$BINTRAY_KEY https://api.bintray.com/content/henkrehorst/homebrew-php/valet-php/valet-php/newvalet-php@$PHPV.$OS.json
