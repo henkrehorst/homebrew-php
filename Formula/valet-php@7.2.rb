@@ -32,6 +32,7 @@ class ValetPhpAT72 < Formula
   depends_on "libpq"
   depends_on "libsodium"
   depends_on "libzip"
+  depends_on "libyaml"
   depends_on "openldap"
   depends_on "openssl"
   depends_on "pcre"
