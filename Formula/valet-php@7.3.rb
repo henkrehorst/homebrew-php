@@ -1,8 +1,8 @@
 class ValetPhpAT73 < Formula
   desc "General-purpose scripting language"
   homepage "https://secure.php.net/"
-  url "https://php.net/get/php-7.3.7.tar.xz/from/this/mirror"
-  sha256 "ba067200ba649956b3a92ec8b71a6ed8ce8a099921212443c1bcf3260a29274c"
+  url "https://php.net/get/php-7.3.8.tar.xz/from/this/mirror"
+  sha256 "f6046b2ae625d8c04310bda0737ac660dc5563a8e04e8a46c1ee24ea414ad5a5"
 
   bottle do
     root_url "https://dl.bintray.com/henkrehorst/homebrew-php"
