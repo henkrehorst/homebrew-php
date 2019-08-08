@@ -1,14 +1,14 @@
 class ValetPhpAT71 < Formula
   desc "General-purpose scripting language"
   homepage "https://secure.php.net/"
-  url "https://php.net/get/php-7.1.30.tar.xz/from/this/mirror"
-  sha256 "6310599811536dbe87e4bcf212bf93196bdfaff519d0c821e4c0068efd096a7c"
+  url "https://php.net/get/php-7.1.31.tar.xz/from/this/mirror"
+  sha256 "5cb53b63592ec4361f0ab12c684b10430344821a024881a387ead4299df78fa5"
 
   bottle do
     root_url "https://dl.bintray.com/henkrehorst/homebrew-php"
-    sha256 "eb7e9931a5c75108b4157309b1dbf2c97780b2262ad403b72bc674104d96ac3c" => :mojave
-    sha256 "f00cf3e3fe86ac53089a2740e85a6372cf42982f61f14afe0d438e10a6cbcf25" => :high_sierra
-    sha256 "fa354e7c30fe9cbae4f5580a0191ef354e63b0d82e7c40f5f378d8a678a70cf6" => :sierra
+    sha256 "48097d94d3fed020b36154b77ad546dad9eaaef2a200e12e6950781ec372148e" => :mojave
+    sha256 "da032ec99e6fcb7fc9b71ecf357632a241a4438765ef909cee5e3c4ec3b1f2fb" => :high_sierra
+    sha256 "c5b63f9d286dfd023ea6a2080b1d68dcc12554aa78aef62ff3c36c7c62518616" => :sierra
   end
 
   keg_only :versioned_formula
