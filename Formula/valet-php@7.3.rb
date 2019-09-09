@@ -3,12 +3,13 @@ class ValetPhpAT73 < Formula
   homepage "https://secure.php.net/"
   url "https://php.net/get/php-7.3.9.tar.xz/from/this/mirror"
   sha256 "4007f24a39822bef2805b75c625551d30be9eeed329d52eb0838fa5c1b91c1fd"
+  revision 2
 
   bottle do
     root_url "https://dl.bintray.com/henkrehorst/homebrew-php"
     sha256 "3c0dcbd702aa890c5c5a4747d86e6d895679533a868606be03cbd79b3f312079" => :mojave
-    sha256 "cf0897697df0bd07bf2f26a877d29c8693273e025cd6ca9e84ac7e0f673e82fe" => :high_sierra
-    sha256 "1690521d57282f028b780464fd2c5a8634596a2dadd91339d86316aea2910611" => :sierra
+    sha256 "691e28124d4e78793cbca98f2447f7b3ed44fda7c5522efbc1f20a285da29f11" => :high_sierra
+    sha256 "a03d15c966533f94f8cf00442e5c7688fe4326b4aac6faac1532b5aa329847e6" => :sierra
   end
 
   keg_only :versioned_formula
@@ -34,7 +35,7 @@ class ValetPhpAT73 < Formula
   depends_on "libyaml"
   depends_on "libzip"
   depends_on "openldap"
-  depends_on "openssl"
+  depends_on "openssl@1.1"
   depends_on "pcre2"
   depends_on "sqlite"
   depends_on "tidy-html5"
@@ -148,7 +149,7 @@ class ValetPhpAT73 < Formula
       --with-mysql-sock=/tmp/mysql.sock
       --with-mysqli=mysqlnd
       --with-ndbm#{headers_path}
-      --with-openssl=#{Formula["openssl"].opt_prefix}
+      --with-openssl=#{Formula["openssl@1.1"].opt_prefix}
       --with-password-argon2=#{Formula["argon2"].opt_prefix}
       --with-pdo-dblib=#{Formula["freetds"].opt_prefix}
       --with-pdo-mysql=mysqlnd
