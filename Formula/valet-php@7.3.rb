@@ -181,6 +181,17 @@ class ValetPhpAT73 < Formula
     inreplace "php.ini-development", %r{; ?extension_dir = "\./"},
               "extension_dir = \"#{HOMEBREW_PREFIX}/lib/php/pecl/#{orig_ext_dir}\""
 
+    # Use OpenSSL cert bundle
+    inreplace "php.ini-development", /; ?openssl\.cafile=/,
+      "openssl.cafile = \"#{HOMEBREW_PREFIX}/etc/openssl/cert.pem\""
+    inreplace "php.ini-development", /; ?openssl\.capath=/,
+      "openssl.capath = \"#{HOMEBREW_PREFIX}/etc/openssl/certs\""
+
+    # php 7.3 known bug
+    # SO discussion: https://stackoverflow.com/a/53709484/791609
+    # bug report: https://bugs.php.net/bug.php?id=77260
+    inreplace "php.ini-development", ";pcre.jit=1", "pcre.jit=0"
+
     config_files = {
         "php.ini-development"   => "php.ini",
         "sapi/fpm/php-fpm.conf" => "php-fpm.conf",
