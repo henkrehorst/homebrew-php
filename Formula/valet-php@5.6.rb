@@ -35,7 +35,7 @@ class ValetPhpAT56 < Formula
   depends_on "libzip"
   depends_on "mcrypt"
   depends_on "openldap"
-  depends_on "openssl"
+  depends_on "henkrehorst/openssl/openssl-old"
   depends_on "pcre"
   depends_on "sqlite"
   depends_on "tidy-html5"
@@ -152,7 +152,7 @@ class ValetPhpAT56 < Formula
       --with-mysqli=mysqlnd
       --with-mysql=mysqlnd
       --with-ndbm#{headers_path}
-      --with-openssl=#{Formula["openssl"].opt_prefix}
+      --with-openssl=#{Formula["henkrehorst/openssl-old"].opt_prefix}
       --with-pdo-dblib=#{Formula["freetds"].opt_prefix}
       --with-pdo-mysql=mysqlnd
       --with-pdo-odbc=unixODBC,#{Formula["unixodbc"].opt_prefix}
