@@ -152,7 +152,7 @@ class ValetPhpAT56 < Formula
       --with-mysqli=mysqlnd
       --with-mysql=mysqlnd
       --with-ndbm#{headers_path}
-      --with-openssl=#{Formula["henkrehorst/openssl-old"].opt_prefix}
+      --with-openssl=#{Formula["henkrehorst/openssl/openssl-old"].opt_prefix}
       --with-pdo-dblib=#{Formula["freetds"].opt_prefix}
       --with-pdo-mysql=mysqlnd
       --with-pdo-odbc=unixODBC,#{Formula["unixodbc"].opt_prefix}
