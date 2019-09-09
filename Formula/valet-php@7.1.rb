@@ -34,7 +34,7 @@ class ValetPhpAT71 < Formula
   depends_on "libyaml"
   depends_on "mcrypt"
   depends_on "openldap"
-  depends_on "openssl"
+  depends_on "openssl@1.1"
   depends_on "pcre"
   depends_on "sqlite"
   depends_on "tidy-html5"
@@ -147,7 +147,7 @@ class ValetPhpAT71 < Formula
       --with-mysql-sock=/tmp/mysql.sock
       --with-mysqli=mysqlnd
       --with-ndbm#{headers_path}
-      --with-openssl=#{Formula["openssl"].opt_prefix}
+      --with-openssl=#{Formula["openssl@1.1"].opt_prefix}
       --with-pdo-dblib=#{Formula["freetds"].opt_prefix}
       --with-pdo-mysql=mysqlnd
       --with-pdo-odbc=unixODBC,#{Formula["unixodbc"].opt_prefix}
