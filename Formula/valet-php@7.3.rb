@@ -12,8 +12,6 @@ class ValetPhpAT73 < Formula
     sha256 "a03d15c966533f94f8cf00442e5c7688fe4326b4aac6faac1532b5aa329847e6" => :sierra
   end
 
-  keg_only :versioned_formula
-
   depends_on "httpd" => [:build, :test]
   depends_on "pkg-config" => :build
   depends_on "apr"
@@ -324,17 +322,17 @@ class ValetPhpAT73 < Formula
 
   test do
     assert_match /^Zend OPcache$/, shell_output("#{bin}/php -i"),
-                 "Zend OPCache extension not loaded"
+      "Zend OPCache extension not loaded"
     # Test related to libxml2 and
     # https://github.com/Homebrew/homebrew-core/issues/28398
     assert_includes MachO::Tools.dylibs("#{bin}/php"),
-                    "#{Formula["libpq"].opt_lib}/libpq.5.dylib"
+      "#{Formula["libpq"].opt_lib}/libpq.5.dylib"
     system "#{sbin}/php-fpm", "-t"
     system "#{bin}/phpdbg", "-V"
     system "#{bin}/php-cgi", "-m"
     # Prevent SNMP extension to be added
     assert_no_match /^snmp$/, shell_output("#{bin}/php -m"),
-                    "SNMP extension doesn't work reliably with Homebrew on High Sierra"
+      "SNMP extension doesn't work reliably with Homebrew on High Sierra"
     begin
       require "socket"
 
