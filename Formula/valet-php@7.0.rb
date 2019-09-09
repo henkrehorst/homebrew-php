@@ -1,15 +1,15 @@
 class ValetPhpAT70 < Formula
   desc "General-purpose scripting language"
-  homepage "https://secure.php.net/"
-  url "https://php.net/get/php-7.0.33.tar.xz/from/this/mirror"
+  homepage "https://www.php.net/"
+  url "https://www.php.net/distributions/php-7.0.33.tar.xz"
   sha256 "ab8c5be6e32b1f8d032909dedaaaa4bbb1a209e519abb01a52ce3914f9a13d96"
-  revision 2
+  revision 3
 
   bottle do
     root_url "https://dl.bintray.com/henkrehorst/homebrew-php"
-    sha256 "823a4f01f8fc3903b2319828497c7b9c0b6cd2682aeff3b14b08c2eae4e93214" => :mojave
-    sha256 "43701038494524f958c71786081cd97990cd3153c04dba73a66f12e1e00f59b3" => :high_sierra
-    sha256 "659e97e4d9acc2365c50fcf51ed35aea1cde1e7f0be303b52b5947d2b70e2467" => :sierra
+    sha256 "1f19c8d3656a4cbdb74e0c779bc9027bc76f0883b72d420c95b3962aee7a9bbe" => :mojave
+    sha256 "ee14a2390d5f553063b5eff2ddba31a232858e2c4bea2c9bb782ec6a6a58dcc5" => :high_sierra
+    sha256 "e733ebbbd29c28075332699eb28585160ad766d11899d7c148f513db84861688" => :sierra
   end
 
   keg_only :versioned_formula
@@ -35,7 +35,7 @@ class ValetPhpAT70 < Formula
   depends_on "libzip"
   depends_on "mcrypt"
   depends_on "openldap"
-  depends_on "openssl"
+  depends_on "openssl@1.1"
   depends_on "pcre"
   depends_on "sqlite"
   depends_on "tidy-html5"
@@ -155,7 +155,7 @@ class ValetPhpAT70 < Formula
       --with-mysql-sock=/tmp/mysql.sock
       --with-mysqli=mysqlnd
       --with-ndbm#{headers_path}
-      --with-openssl=#{Formula["openssl"].opt_prefix}
+      --with-openssl=#{Formula["openssl@1.1"].opt_prefix}
       --with-pdo-dblib=#{Formula["freetds"].opt_prefix}
       --with-pdo-mysql=mysqlnd
       --with-pdo-odbc=unixODBC,#{Formula["unixodbc"].opt_prefix}

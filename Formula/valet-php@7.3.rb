@@ -1,17 +1,16 @@
 class ValetPhpAT73 < Formula
   desc "General-purpose scripting language"
-  homepage "https://secure.php.net/"
-  url "https://php.net/get/php-7.3.8.tar.xz/from/this/mirror"
-  sha256 "f6046b2ae625d8c04310bda0737ac660dc5563a8e04e8a46c1ee24ea414ad5a5"
+  homepage "https://www.php.net/"
+  url "https://www.php.net/distributions/php-7.3.9.tar.xz"
+  sha256 "4007f24a39822bef2805b75c625551d30be9eeed329d52eb0838fa5c1b91c1fd"
+  revision 2
 
   bottle do
     root_url "https://dl.bintray.com/henkrehorst/homebrew-php"
-    sha256 "3c0dcbd702aa890c5c5a4747d86e6d895679533a868606be03cbd79b3f312079" => :mojave
-    sha256 "cf0897697df0bd07bf2f26a877d29c8693273e025cd6ca9e84ac7e0f673e82fe" => :high_sierra
-    sha256 "1690521d57282f028b780464fd2c5a8634596a2dadd91339d86316aea2910611" => :sierra
+    sha256 "1a8cc9f52fd53978304d713702c819517bc0341224b49aaaafca093f86f5af80" => :mojave
+    sha256 "4cad5bdc5878861bbf8ec5721e4f70fa80c3ff98e0903f444c90312a4ae0f02f" => :high_sierra
+    sha256 "cf726a4c437c3be1a2820015e5f949bdb1b23b5f7e2c5b8e0305c8dbd5c311a8" => :sierra
   end
-
-  keg_only :versioned_formula
 
   depends_on "httpd" => [:build, :test]
   depends_on "pkg-config" => :build
@@ -34,7 +33,7 @@ class ValetPhpAT73 < Formula
   depends_on "libyaml"
   depends_on "libzip"
   depends_on "openldap"
-  depends_on "openssl"
+  depends_on "openssl@1.1"
   depends_on "pcre2"
   depends_on "sqlite"
   depends_on "tidy-html5"
@@ -148,7 +147,7 @@ class ValetPhpAT73 < Formula
       --with-mysql-sock=/tmp/mysql.sock
       --with-mysqli=mysqlnd
       --with-ndbm#{headers_path}
-      --with-openssl=#{Formula["openssl"].opt_prefix}
+      --with-openssl=#{Formula["openssl@1.1"].opt_prefix}
       --with-password-argon2=#{Formula["argon2"].opt_prefix}
       --with-pdo-dblib=#{Formula["freetds"].opt_prefix}
       --with-pdo-mysql=mysqlnd
@@ -179,6 +178,17 @@ class ValetPhpAT73 < Formula
     inreplace bin/"php-config", lib/"php", prefix/"pecl"
     inreplace "php.ini-development", %r{; ?extension_dir = "\./"},
               "extension_dir = \"#{HOMEBREW_PREFIX}/lib/php/pecl/#{orig_ext_dir}\""
+
+    # Use OpenSSL cert bundle
+    inreplace "php.ini-development", /; ?openssl\.cafile=/,
+      "openssl.cafile = \"#{HOMEBREW_PREFIX}/etc/openssl/cert.pem\""
+    inreplace "php.ini-development", /; ?openssl\.capath=/,
+      "openssl.capath = \"#{HOMEBREW_PREFIX}/etc/openssl/certs\""
+
+    # php 7.3 known bug
+    # SO discussion: https://stackoverflow.com/a/53709484/791609
+    # bug report: https://bugs.php.net/bug.php?id=77260
+    inreplace "php.ini-development", ";pcre.jit=1", "pcre.jit=0"
 
     config_files = {
         "php.ini-development"   => "php.ini",
@@ -312,17 +322,17 @@ class ValetPhpAT73 < Formula
 
   test do
     assert_match /^Zend OPcache$/, shell_output("#{bin}/php -i"),
-                 "Zend OPCache extension not loaded"
+      "Zend OPCache extension not loaded"
     # Test related to libxml2 and
     # https://github.com/Homebrew/homebrew-core/issues/28398
     assert_includes MachO::Tools.dylibs("#{bin}/php"),
-                    "#{Formula["libpq"].opt_lib}/libpq.5.dylib"
+      "#{Formula["libpq"].opt_lib}/libpq.5.dylib"
     system "#{sbin}/php-fpm", "-t"
     system "#{bin}/phpdbg", "-V"
     system "#{bin}/php-cgi", "-m"
     # Prevent SNMP extension to be added
     assert_no_match /^snmp$/, shell_output("#{bin}/php -m"),
-                    "SNMP extension doesn't work reliably with Homebrew on High Sierra"
+      "SNMP extension doesn't work reliably with Homebrew on High Sierra"
     begin
       require "socket"
 
