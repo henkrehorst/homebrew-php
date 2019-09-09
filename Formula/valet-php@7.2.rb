@@ -3,6 +3,7 @@ class ValetPhpAT72 < Formula
   homepage "https://secure.php.net/"
   url "https://php.net/get/php-7.2.22.tar.xz/from/this/mirror"
   sha256 "eb597fcf8dc0a6211a42a6346de4f63ee166829a6df6d8ed767fe14be8d1c3a3"
+  revision 2
 
   bottle do
     root_url "https://dl.bintray.com/henkrehorst/homebrew-php"
