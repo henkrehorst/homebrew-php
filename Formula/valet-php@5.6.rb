@@ -17,7 +17,7 @@ class ValetPhpAT56 < Formula
   depends_on "httpd" => [:build, :test]
   depends_on "pkg-config" => :build
   depends_on "apr"
-  depends_on "apr-util"
+  depends_on "henkrehorst/bc/apr-util-bc"
   depends_on "aspell"
   depends_on "autoconf"
   depends_on "henkrehorst/openssl/curl-openssl-old"
