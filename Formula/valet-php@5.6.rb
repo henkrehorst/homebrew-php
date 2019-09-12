@@ -14,7 +14,7 @@ class ValetPhpAT56 < Formula
 
   keg_only :versioned_formula
 
-  depends_on "httpd" => [:build, :test]
+  depends_on "henkrehorst/bc/httpd-bc" => [:build, :test]
   depends_on "pkg-config" => :build
   depends_on "apr"
   depends_on "henkrehorst/bc/apr-util-bc"
@@ -127,7 +127,7 @@ class ValetPhpAT56 < Formula
       --enable-sysvshm
       --enable-wddx
       --enable-zip
-      --with-apxs2=#{Formula["httpd"].opt_bin}/apxs
+      --with-apxs2=#{Formula["henkrehorst/bc/httpd-bc"].opt_bin}/apxs
       --with-bz2#{headers_path}
       --with-curl=#{Formula["henkrehorst/openssl/curl-openssl-old"].opt_prefix}
       --with-fpm-user=_www
@@ -344,7 +344,7 @@ class ValetPhpAT56 < Formula
         ServerName localhost:#{port}
         DocumentRoot "#{testpath}"
         ErrorLog "#{testpath}/httpd-error.log"
-        ServerRoot "#{Formula["httpd"].opt_prefix}"
+        ServerRoot "#{Formula["henkrehorst/bc/httpd-bc"].opt_prefix}"
         PidFile "#{testpath}/httpd.pid"
         LoadModule authz_core_module lib/httpd/modules/mod_authz_core.so
         LoadModule unixd_module lib/httpd/modules/mod_unixd.so
@@ -397,7 +397,7 @@ class ValetPhpAT56 < Formula
         exec sbin/"php-fpm", "-y", "fpm.conf"
       end
       pid = fork do
-        exec Formula["httpd"].opt_bin/"httpd", "-X", "-f", "#{testpath}/httpd-fpm.conf"
+        exec Formula["henkrehorst/bc/httpd-bc"].opt_bin/"httpd", "-X", "-f", "#{testpath}/httpd-fpm.conf"
       end
       sleep 3
 
