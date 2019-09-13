@@ -20,7 +20,7 @@ class ValetPhpAT56 < Formula
   depends_on "henkrehorst/bc/apr-util-bc"
   depends_on "aspell"
   depends_on "autoconf"
-  depends_on "henkrehorst/bc/curl-openssl-bc"
+  depends_on "curl-openssl"
   depends_on "freetds"
   depends_on "freetype"
   depends_on "gettext"
@@ -129,7 +129,7 @@ class ValetPhpAT56 < Formula
       --enable-zip
       --with-apxs2=#{Formula["henkrehorst/bc/httpd-bc"].opt_bin}/apxs
       --with-bz2#{headers_path}
-      --with-curl=#{Formula["henkrehorst/bc/curl-openssl-bc"].opt_prefix}
+      --with-curl=#{Formula["curl-openssl"].opt_prefix}
       --with-fpm-user=_www
       --with-fpm-group=_www
       --with-freetype-dir=#{Formula["freetype"].opt_prefix}
