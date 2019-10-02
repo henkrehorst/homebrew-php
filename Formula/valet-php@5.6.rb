@@ -6,17 +6,17 @@ class ValetPhpAT56 < Formula
 
   bottle do
     root_url "https://dl.bintray.com/henkrehorst/homebrew-php"
-    sha256 "4305ec7ec501168179cde7993caa870b22245b40902e6f5d354f3f61559f5ef6" => :mojave
-    sha256 "7be02b64d53e1fbbb32c21f6792b5f2790fa641aed91bbb70423a4fa91d5dcbb" => :high_sierra
-    sha256 "dfd5c3cbec6b4e42011fe3d5b0ee5e5e09652b81c00862cbb241b07b4ceed771" => :sierra
+    sha256 "eb959a1f54f0c0a85d3659381c0190a0450a8f4ec86b1f4d450444f1f9ada249" => :mojave
+    sha256 "3233c994c42b4b3b243caebc81f2ca3753c5e14db9faf96063a1bf9a9c861e69" => :high_sierra
+    sha256 "61e5676b06f584f95cc7053e7be41da0d03a2a60ebc938a8ae80e387af6f1f4a" => :sierra
   end
 
   keg_only :versioned_formula
 
-  depends_on "httpd" => [:build, :test]
+  depends_on "henkrehorst/bc/httpd-bc" => [:build, :test]
   depends_on "pkg-config" => :build
   depends_on "apr"
-  depends_on "apr-util"
+  depends_on "henkrehorst/bc/apr-util-bc"
   depends_on "aspell"
   depends_on "autoconf"
   depends_on "curl-openssl"
@@ -34,7 +34,7 @@ class ValetPhpAT56 < Formula
   depends_on "libzip"
   depends_on "mcrypt"
   depends_on "openldap"
-  depends_on "openssl"
+  depends_on "henkrehorst/bc/openssl-bc"
   depends_on "pcre"
   depends_on "sqlite"
   depends_on "tidy-html5"
@@ -126,7 +126,7 @@ class ValetPhpAT56 < Formula
       --enable-sysvshm
       --enable-wddx
       --enable-zip
-      --with-apxs2=#{Formula["httpd"].opt_bin}/apxs
+      --with-apxs2=#{Formula["henkrehorst/bc/httpd-bc"].opt_bin}/apxs
       --with-bz2#{headers_path}
       --with-curl=#{Formula["curl-openssl"].opt_prefix}
       --with-fpm-user=_www
@@ -151,7 +151,7 @@ class ValetPhpAT56 < Formula
       --with-mysqli=mysqlnd
       --with-mysql=mysqlnd
       --with-ndbm#{headers_path}
-      --with-openssl=#{Formula["openssl"].opt_prefix}
+      --with-openssl=#{Formula["henkrehorst/bc/openssl-bc"].opt_prefix}
       --with-pdo-dblib=#{Formula["freetds"].opt_prefix}
       --with-pdo-mysql=mysqlnd
       --with-pdo-odbc=unixODBC,#{Formula["unixodbc"].opt_prefix}
@@ -343,7 +343,7 @@ class ValetPhpAT56 < Formula
         ServerName localhost:#{port}
         DocumentRoot "#{testpath}"
         ErrorLog "#{testpath}/httpd-error.log"
-        ServerRoot "#{Formula["httpd"].opt_prefix}"
+        ServerRoot "#{Formula["henkrehorst/bc/httpd-bc"].opt_prefix}"
         PidFile "#{testpath}/httpd.pid"
         LoadModule authz_core_module lib/httpd/modules/mod_authz_core.so
         LoadModule unixd_module lib/httpd/modules/mod_unixd.so
@@ -396,7 +396,7 @@ class ValetPhpAT56 < Formula
         exec sbin/"php-fpm", "-y", "fpm.conf"
       end
       pid = fork do
-        exec Formula["httpd"].opt_bin/"httpd", "-X", "-f", "#{testpath}/httpd-fpm.conf"
+        exec Formula["henkrehorst/bc/httpd-bc"].opt_bin/"httpd", "-X", "-f", "#{testpath}/httpd-fpm.conf"
       end
       sleep 3
 
