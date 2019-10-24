@@ -1,15 +1,15 @@
 class ValetPhpAT72 < Formula
   desc "General-purpose scripting language"
   homepage "https://www.php.net/"
-  url "https://www.php.net/distributions/php-7.2.22.tar.xz"
-  sha256 "eb597fcf8dc0a6211a42a6346de4f63ee166829a6df6d8ed767fe14be8d1c3a3"
+  url "https://www.php.net/distributions/php-7.2.24.tar.xz"
+  sha256 "a6a6cc03388060aa5f8f9e45799b72bce1c7ed7b9d7b3f1187787202aad91d25"
   revision 2
 
   bottle do
     root_url "https://dl.bintray.com/henkrehorst/homebrew-php"
-    sha256 "8d2df4f77611501450e13acc4c833a1eef8e629f3a052a351261eee0e180faac" => :mojave
-    sha256 "43e9ffb1902aa5fd13ca52fbbcfd00ce53c1f4e5d2d744c986d18b33048b39d6" => :high_sierra
-    sha256 "71b042dc1e8b5d1e890d2d72a5ca1166576c9652fa401be0e989d9a5ca8da7dd" => :sierra
+    sha256 "bd5ace6e0a37899afbb2f3d085861a48ac347d18b0b9e7c1fe7d850299a1d04e" => :mojave
+    sha256 "96231f756d3667664fe22d0ca60be8d0b7de2c9872ff0abeae99cc4227b4c8b3" => :high_sierra
+    sha256 "b04f4b0f7b705579bc595e9a5bb6b75f555164023daa91afdca13454f85cbb22" => :sierra
   end
 
   keg_only :versioned_formula
