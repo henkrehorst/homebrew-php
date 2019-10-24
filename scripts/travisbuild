@@ -1,5 +1,6 @@
 #!/bin/bash
-travis_wait 30 brew install --build-bottle Formula/valet-php@"$PHPV".rb
+pip install travis-wait-improved
+travis-wait-improved --timeout 30m brew install --build-bottle Formula/valet-php@"$PHPV".rb
 brew bottle valet-php@$PHPV --json --force-core-tap
 brew install jq
 bottleJson=$( cat *.json )
