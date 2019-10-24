@@ -1,15 +1,15 @@
 class ValetPhpAT73 < Formula
   desc "General-purpose scripting language"
   homepage "https://www.php.net/"
-  url "https://www.php.net/distributions/php-7.3.9.tar.xz"
-  sha256 "4007f24a39822bef2805b75c625551d30be9eeed329d52eb0838fa5c1b91c1fd"
+  url "https://www.php.net/distributions/php-7.3.11.tar.xz"
+  sha256 "657cf6464bac28e9490c59c07a2cf7bb76c200f09cfadf6e44ea64e95fa01021"
   revision 2
 
   bottle do
     root_url "https://dl.bintray.com/henkrehorst/homebrew-php"
-    sha256 "1a8cc9f52fd53978304d713702c819517bc0341224b49aaaafca093f86f5af80" => :mojave
-    sha256 "4cad5bdc5878861bbf8ec5721e4f70fa80c3ff98e0903f444c90312a4ae0f02f" => :high_sierra
-    sha256 "cf726a4c437c3be1a2820015e5f949bdb1b23b5f7e2c5b8e0305c8dbd5c311a8" => :sierra
+    sha256 "a4a9e8301164114aeecbad08baf793d2eac737a8def64345a8d876e2e4cf55dd" => :mojave
+    sha256 "ffa2ff06bda69f56c24efbf9951cd06b2ea28583437ff071aa72f8ab1f81610f" => :high_sierra
+    sha256 "5d3a68efd248010b1fa6d8babf2ec60a1931f0f0086344a02a2d04a6a186c8f5" => :sierra
   end
 
   depends_on "httpd" => [:build, :test]
