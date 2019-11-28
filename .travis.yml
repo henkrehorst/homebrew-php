@@ -13,7 +13,7 @@ jobs:
       env:
         - PHPV=5.6
         - OS=high_sierra
-      script: 
+      script:
         - "travis_wait 30 sleep 1800 &"
         - bash scripts/travisbuild
     - stage: php 5.6
@@ -21,7 +21,7 @@ jobs:
       env:
         - PHPV=5.6
         - OS=sierra
-      script: 
+      script:
         - "travis_wait 30 sleep 1800 &"
         - bash scripts/travisbuild
     - stage: php 5.6
@@ -29,7 +29,7 @@ jobs:
       env:
         - PHPV=5.6
         - OS=mojave
-      script: 
+      script:
         - "travis_wait 30 sleep 1800 &"
         - bash scripts/travisbuild
     - stage: php 7.0
@@ -37,7 +37,7 @@ jobs:
       env:
         - PHPV=7.0
         - OS=high_sierra
-      script: 
+      script:
         - "travis_wait 30 sleep 1800 &"
         - bash scripts/travisbuild
     - stage: php 7.0
@@ -45,7 +45,7 @@ jobs:
       env:
         - PHPV=7.0
         - OS=sierra
-      script: 
+      script:
         - "travis_wait 30 sleep 1800 &"
         - bash scripts/travisbuild
     - stage: php 7.0
@@ -53,7 +53,7 @@ jobs:
       env:
         - PHPV=7.0
         - OS=mojave
-      script: 
+      script:
         - "travis_wait 30 sleep 1800 &"
         - bash scripts/travisbuild
     - stage: php 7.1
@@ -61,7 +61,7 @@ jobs:
       env:
         - PHPV=7.1
         - OS=high_sierra
-      script: 
+      script:
         - "travis_wait 30 sleep 1800 &"
         - bash scripts/travisbuild
     - stage: php 7.1
@@ -69,7 +69,7 @@ jobs:
       env:
         - PHPV=7.1
         - OS=sierra
-      script: 
+      script:
         - "travis_wait 30 sleep 1800 &"
         - bash scripts/travisbuild
     - stage: php 7.1
@@ -77,7 +77,7 @@ jobs:
       env:
         - PHPV=7.1
         - OS=mojave
-      script: 
+      script:
         - "travis_wait 30 sleep 1800 &"
         - bash scripts/travisbuild
     - stage: php 7.2
@@ -85,7 +85,7 @@ jobs:
       env:
           - PHPV=7.2
           - OS=high_sierra
-      script: 
+      script:
         - "travis_wait 30 sleep 1800 &"
         - bash scripts/travisbuild
     - stage: php 7.2
@@ -93,7 +93,7 @@ jobs:
       env:
         - PHPV=7.2
         - OS=sierra
-      script: 
+      script:
         - "travis_wait 30 sleep 1800 &"
         - bash scripts/travisbuild
     - stage: php 7.2
@@ -101,7 +101,7 @@ jobs:
       env:
         - PHPV=7.2
         - OS=mojave
-      script: 
+      script:
         - "travis_wait 30 sleep 1800 &"
         - bash scripts/travisbuild
     - stage: php 7.3
@@ -109,7 +109,7 @@ jobs:
       env:
         - PHPV=7.3
         - OS=high_sierra
-      script: 
+      script:
         - "travis_wait 30 sleep 1800 &"
         - bash scripts/travisbuild
     - stage: php 7.3
@@ -117,7 +117,7 @@ jobs:
       env:
         - PHPV=7.3
         - OS=sierra
-      script: 
+      script:
         - "travis_wait 30 sleep 1800 &"
         - bash scripts/travisbuild
     - stage: php 7.3
@@ -125,6 +125,30 @@ jobs:
       env:
         - PHPV=7.3
         - OS=mojave
-      script: 
+      script:
         - "travis_wait 30 sleep 1800 &"
         - bash scripts/travisbuild
+    - stage: php 7.4
+        osx_image: xcode10
+        env:
+          - PHPV=7.4
+          - OS=high_sierra
+        script:
+          - "travis_wait 30 sleep 1800 &"
+          - bash scripts/travisbuild
+    - stage: php 7.4
+        osx_image: xcode9.2
+        env:
+          - PHPV=7.4
+          - OS=sierra
+        script:
+          - "travis_wait 30 sleep 1800 &"
+          - bash scripts/travisbuild
+    - stage: php 7.4
+        osx_image: xcode10.2
+        env:
+          - PHPV=7.4
+          - OS=mojave
+        script:
+          - "travis_wait 30 sleep 1800 &"
+          - bash scripts/travisbuild
