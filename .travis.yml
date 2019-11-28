@@ -129,26 +129,26 @@ jobs:
         - "travis_wait 30 sleep 1800 &"
         - bash scripts/travisbuild
     - stage: php 7.4
-        osx_image: xcode10
-        env:
-          - PHPV=7.4
-          - OS=high_sierra
-        script:
-          - "travis_wait 30 sleep 1800 &"
-          - bash scripts/travisbuild
+      osx_image: xcode10
+      env:
+        - PHPV=7.4
+        - OS=high_sierra
+      script:
+        - "travis_wait 30 sleep 1800 &"
+        - bash scripts/travisbuild
     - stage: php 7.4
-        osx_image: xcode9.2
-        env:
-          - PHPV=7.4
-          - OS=sierra
-        script:
-          - "travis_wait 30 sleep 1800 &"
-          - bash scripts/travisbuild
+      osx_image: xcode9.2
+      env:
+        - PHPV=7.4
+        - OS=sierra
+      script:
+        - "travis_wait 30 sleep 1800 &"
+        - bash scripts/travisbuild
     - stage: php 7.4
-        osx_image: xcode10.2
-        env:
-          - PHPV=7.4
-          - OS=mojave
-        script:
-          - "travis_wait 30 sleep 1800 &"
-          - bash scripts/travisbuild
+      osx_image: xcode10.2
+      env:
+        - PHPV=7.4
+        - OS=mojave
+      script:
+        - "travis_wait 30 sleep 1800 &"
+        - bash scripts/travisbuild
