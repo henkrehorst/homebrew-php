@@ -1,4 +1,4 @@
-class ValetPhpAT71 < Formula
+class ValetPhpAT74 < Formula
   desc "General-purpose scripting language"
   homepage "https://www.php.net/"
   url "https://www.php.net/distributions/php-7.4.0.tar.xz"
