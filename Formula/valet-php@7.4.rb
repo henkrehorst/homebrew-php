@@ -29,6 +29,7 @@ class ValetPhpAT74 < Formula
   depends_on "libpng"
   depends_on "libpq"
   depends_on "libsodium"
+  depends_on "libyaml"
   depends_on "libzip"
   depends_on "oniguruma"
   depends_on "openldap"
@@ -58,6 +59,10 @@ class ValetPhpAT74 < Formula
               "APXS_LIBEXECDIR='$(INSTALL_ROOT)#{lib}/httpd/modules'"
       s.gsub! "-z `$APXS -q SYSCONFDIR`",
               "-z ''"
+
+      # apxs will interpolate the @ in the versioned prefix: https://bz.apache.org/bugzilla/show_bug.cgi?id=61944
+      s.gsub! "LIBEXECDIR='$APXS_LIBEXECDIR'",
+              "LIBEXECDIR='" + "#{lib}/httpd/modules".gsub("@", "\\@") + "'"
     end
 
     # Update error message in apache sapi to better explain the requirements
@@ -172,18 +177,18 @@ class ValetPhpAT74 < Formula
     orig_ext_dir = File.basename(extension_dir)
     inreplace bin/"php-config", lib/"php", prefix/"pecl"
     inreplace "php.ini-development", %r{; ?extension_dir = "\./"},
-              "extension_dir = \"#{HOMEBREW_PREFIX}/lib/php/pecl/#{orig_ext_dir}\""
+      "extension_dir = \"#{HOMEBREW_PREFIX}/lib/php/pecl/#{orig_ext_dir}\""
 
     # Use OpenSSL cert bundle
     inreplace "php.ini-development", /; ?openssl\.cafile=/,
-              "openssl.cafile = \"#{etc}/openssl@1.1/cert.pem\""
+      "openssl.cafile = \"#{etc}/openssl@1.1/cert.pem\""
     inreplace "php.ini-development", /; ?openssl\.capath=/,
-              "openssl.capath = \"#{etc}/openssl@1.1/certs\""
+      "openssl.capath = \"#{etc}/openssl@1.1/certs\""
 
     config_files = {
-        "php.ini-development"   => "php.ini",
-        "sapi/fpm/php-fpm.conf" => "php-fpm.conf",
-        "sapi/fpm/www.conf"     => "php-fpm.d/www.conf",
+      "php.ini-development"   => "php.ini",
+      "sapi/fpm/php-fpm.conf" => "php-fpm.conf",
+      "sapi/fpm/www.conf"     => "php-fpm.d/www.conf",
     }
     config_files.each_value do |dst|
       dst_default = config_path/"#{dst}.default"
@@ -207,7 +212,7 @@ class ValetPhpAT74 < Formula
     ]
 
     %W[
-    #{pear_prefix}/.channels
+      #{pear_prefix}/.channels
       #{pear_prefix}/.channels/.alias
     ].each do |f|
       chmod 0755, f
@@ -252,7 +257,7 @@ class ValetPhpAT74 < Formula
       extension_type = (e == "opcache") ? "zend_extension" : "extension"
       if ext_config_path.exist?
         inreplace ext_config_path,
-                  /#{extension_type}=.*$/, "#{extension_type}=#{php_ext_dir}/#{e}.so"
+          /#{extension_type}=.*$/, "#{extension_type}=#{php_ext_dir}/#{e}.so"
       else
         ext_config_path.write <<~EOS
           [#{e}]
@@ -312,17 +317,17 @@ class ValetPhpAT74 < Formula
 
   test do
     assert_match /^Zend OPcache$/, shell_output("#{bin}/php -i"),
-                 "Zend OPCache extension not loaded"
+      "Zend OPCache extension not loaded"
     # Test related to libxml2 and
     # https://github.com/Homebrew/homebrew-core/issues/28398
     assert_includes MachO::Tools.dylibs("#{bin}/php"),
-                    "#{Formula["libpq"].opt_lib}/libpq.5.dylib"
+      "#{Formula["libpq"].opt_lib}/libpq.5.dylib"
     system "#{sbin}/php-fpm", "-t"
     system "#{bin}/phpdbg", "-V"
     system "#{bin}/php-cgi", "-m"
     # Prevent SNMP extension to be added
     assert_no_match /^snmp$/, shell_output("#{bin}/php -m"),
-                    "SNMP extension doesn't work reliably with Homebrew on High Sierra"
+      "SNMP extension doesn't work reliably with Homebrew on High Sierra"
     begin
       require "socket"
 
