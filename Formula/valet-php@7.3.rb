@@ -3,14 +3,15 @@ class ValetPhpAT73 < Formula
   homepage "https://www.php.net/"
   url "https://www.php.net/distributions/php-7.3.11.tar.xz"
   sha256 "657cf6464bac28e9490c59c07a2cf7bb76c200f09cfadf6e44ea64e95fa01021"
-  revision 2
+  revision 3
 
   bottle do
     root_url "https://dl.bintray.com/henkrehorst/homebrew-php"
-    sha256 "a4a9e8301164114aeecbad08baf793d2eac737a8def64345a8d876e2e4cf55dd" => :mojave
-    sha256 "ffa2ff06bda69f56c24efbf9951cd06b2ea28583437ff071aa72f8ab1f81610f" => :high_sierra
-    sha256 "5d3a68efd248010b1fa6d8babf2ec60a1931f0f0086344a02a2d04a6a186c8f5" => :sierra
+    sha256 "03c444f3707d08d0d3cd5bc1d3d6ebba0cdd904c4b2e8ebffc44d89acc83dc15" => :mojave
+    sha256 "daf44f31f04f844938c326398ad1c9ef3fcfdfd011c61e820a9e0d198528b50d" => :high_sierra
   end
+
+  keg_only :versioned_formula
 
   depends_on "httpd" => [:build, :test]
   depends_on "pkg-config" => :build

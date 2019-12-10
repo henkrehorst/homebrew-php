@@ -3,11 +3,14 @@ class ValetPhpAT74 < Formula
   homepage "https://www.php.net/"
   url "https://www.php.net/distributions/php-7.4.0.tar.xz"
   sha256 "9bb751b20e5d6cc1ea9b1ebf23ef2d5f07f99b2d9cc417bf1d70c04f8b20ec42"
+  revision 2
 
   bottle do
-    sha256 "cf9e77a60a68f2004bea3b4604efea7e34f9738ddc8f5461c45accfaabc64deb" => :mojave
-    sha256 "b15453bba17864ab5c536901e8c4e422759cf7d151b95ace1ecb7ab9340c295a" => :high_sierra
+    sha256 "65743a8edb347fc220187aa4a243ef135f1e2ce5745aee0aee01d99de7be9147" => :mojave
+    sha256 "eb2e519cb4d8150469d5ea23f3b429c237d37a0d20b4b1d5d785e4af3f3c67d3" => :high_sierra
   end
+
+  keg_only :versioned_formula
 
   depends_on "httpd" => [:build, :test]
   depends_on "pkg-config" => :build
