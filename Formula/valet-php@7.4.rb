@@ -3,6 +3,7 @@ class ValetPhpAT74 < Formula
   homepage "https://www.php.net/"
   url "https://www.php.net/distributions/php-7.4.0.tar.xz"
   sha256 "9bb751b20e5d6cc1ea9b1ebf23ef2d5f07f99b2d9cc417bf1d70c04f8b20ec42"
+  revision 2
 
   bottle do
     sha256 "cf9e77a60a68f2004bea3b4604efea7e34f9738ddc8f5461c45accfaabc64deb" => :mojave

@@ -3,7 +3,7 @@ class ValetPhpAT73 < Formula
   homepage "https://www.php.net/"
   url "https://www.php.net/distributions/php-7.3.11.tar.xz"
   sha256 "657cf6464bac28e9490c59c07a2cf7bb76c200f09cfadf6e44ea64e95fa01021"
-  revision 2
+  revision 3
 
   bottle do
     root_url "https://dl.bintray.com/henkrehorst/homebrew-php"
