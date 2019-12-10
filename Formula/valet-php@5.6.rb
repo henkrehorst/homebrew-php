@@ -8,7 +8,6 @@ class ValetPhpAT56 < Formula
     root_url "https://dl.bintray.com/henkrehorst/homebrew-php"
     sha256 "eb959a1f54f0c0a85d3659381c0190a0450a8f4ec86b1f4d450444f1f9ada249" => :mojave
     sha256 "3233c994c42b4b3b243caebc81f2ca3753c5e14db9faf96063a1bf9a9c861e69" => :high_sierra
-    sha256 "61e5676b06f584f95cc7053e7be41da0d03a2a60ebc938a8ae80e387af6f1f4a" => :sierra
   end
 
   keg_only :versioned_formula
