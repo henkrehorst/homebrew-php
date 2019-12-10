@@ -1,7 +1,6 @@
 os: osx
 osx_image:
   - xcode10
-  - xcode9.2
   - xcode10.2
 addons:
   homebrew:
@@ -17,14 +16,6 @@ jobs:
         - "travis_wait 30 sleep 1800 &"
         - bash scripts/travisbuild
     - stage: php 5.6
-      osx_image: xcode9.2
-      env:
-        - PHPV=5.6
-        - OS=sierra
-      script:
-        - "travis_wait 90 sleep 1800 &"
-        - bash scripts/travisbuild
-    - stage: php 5.6
       osx_image: xcode10.2
       env:
         - PHPV=5.6
@@ -41,14 +32,6 @@ jobs:
         - "travis_wait 30 sleep 1800 &"
         - bash scripts/travisbuild
     - stage: php 7.0
-      osx_image: xcode9.2
-      env:
-        - PHPV=7.0
-        - OS=sierra
-      script:
-        - "travis_wait 90 sleep 1800 &"
-        - bash scripts/travisbuild
-    - stage: php 7.0
       osx_image: xcode10.2
       env:
         - PHPV=7.0
@@ -63,14 +46,6 @@ jobs:
         - OS=high_sierra
       script:
         - "travis_wait 30 sleep 1800 &"
-        - bash scripts/travisbuild
-    - stage: php 7.1
-      osx_image: xcode9.2
-      env:
-        - PHPV=7.1
-        - OS=sierra
-      script:
-        - "travis_wait 90 sleep 1800 &"
         - bash scripts/travisbuild
     - stage: php 7.1
       osx_image: xcode10.2
@@ -87,14 +62,6 @@ jobs:
           - OS=high_sierra
       script:
         - "travis_wait 30 sleep 1800 &"
-        - bash scripts/travisbuild
-    - stage: php 7.2
-      osx_image: xcode9.2
-      env:
-        - PHPV=7.2
-        - OS=sierra
-      script:
-        - "travis_wait 90 sleep 1800 &"
         - bash scripts/travisbuild
     - stage: php 7.2
       osx_image: xcode10.2
