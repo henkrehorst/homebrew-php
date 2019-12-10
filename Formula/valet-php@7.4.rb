@@ -9,6 +9,8 @@ class ValetPhpAT74 < Formula
     sha256 "b15453bba17864ab5c536901e8c4e422759cf7d151b95ace1ecb7ab9340c295a" => :high_sierra
   end
 
+  keg_only :versioned_formula
+
   depends_on "httpd" => [:build, :test]
   depends_on "pkg-config" => :build
   depends_on "apr"

@@ -9,8 +9,9 @@ class ValetPhpAT73 < Formula
     root_url "https://dl.bintray.com/henkrehorst/homebrew-php"
     sha256 "a4a9e8301164114aeecbad08baf793d2eac737a8def64345a8d876e2e4cf55dd" => :mojave
     sha256 "ffa2ff06bda69f56c24efbf9951cd06b2ea28583437ff071aa72f8ab1f81610f" => :high_sierra
-    sha256 "5d3a68efd248010b1fa6d8babf2ec60a1931f0f0086344a02a2d04a6a186c8f5" => :sierra
   end
+
+  keg_only :versioned_formula
 
   depends_on "httpd" => [:build, :test]
   depends_on "pkg-config" => :build
