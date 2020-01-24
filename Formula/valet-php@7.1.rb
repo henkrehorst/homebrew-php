@@ -1,15 +1,15 @@
 class ValetPhpAT71 < Formula
   desc "General-purpose scripting language"
-  homepage "https://secure.php.net/"
-  url "https://php.net/get/php-7.1.26.tar.xz/from/this/mirror"
-  sha256 "10b7ae634c12852fae52a22dc2262e5f12418ad59fd20da2d00d71a212235d31"
+  homepage "https://www.php.net/"
+  url "https://www.php.net/distributions/php-7.1.33.tar.xz"
+  sha256 "bd7c0a9bd5433289ee01fd440af3715309faf583f75832b64fe169c100d52968"
+  revision 2
 
   bottle do
     root_url "https://dl.bintray.com/henkrehorst/homebrew-php"
-    rebuild 1
-    sha256 "74df1d5d23f4739b2d34fa8b7df03164eca6e0c8d95725af632ce3612689209d" => :mojave
-    sha256 "758f48fb0cfcec3f336965d6f601da948c9462582a4151a44b62fd97d5618185" => :high_sierra
-    sha256 "67150853abd806a91e41c55c7394359e138b242d51cd670b778438f1ab702b5f" => :sierra
+    sha256 "5c1af2e2b9cfde3c07b1d6ab3f487e4154cff8b6ddb7a18ca3e2a9acf15cc45d" => :mojave
+    sha256 "45fedec57641a6224ed471f25c31544327a815af5c5218ea4e6c95830606b4b5" => :high_sierra
+    sha256 "ddaf8db2ed3fc430dab970a06174bc65032329e1612b6bd49f2fd81bbca747cb" => :sierra
   end
 
   keg_only :versioned_formula
@@ -32,9 +32,10 @@ class ValetPhpAT71 < Formula
   depends_on "libpq"
   depends_on "libtool"
   depends_on "libzip"
+  depends_on "libyaml"
   depends_on "mcrypt"
   depends_on "openldap"
-  depends_on "openssl"
+  depends_on "openssl@1.1"
   depends_on "pcre"
   depends_on "sqlite"
   depends_on "tidy-html5"
@@ -147,7 +148,7 @@ class ValetPhpAT71 < Formula
       --with-mysql-sock=/tmp/mysql.sock
       --with-mysqli=mysqlnd
       --with-ndbm#{headers_path}
-      --with-openssl=#{Formula["openssl"].opt_prefix}
+      --with-openssl=#{Formula["openssl@1.1"].opt_prefix}
       --with-pdo-dblib=#{Formula["freetds"].opt_prefix}
       --with-pdo-mysql=mysqlnd
       --with-pdo-odbc=unixODBC,#{Formula["unixodbc"].opt_prefix}
@@ -176,6 +177,12 @@ class ValetPhpAT71 < Formula
     inreplace bin/"php-config", lib/"php", prefix/"pecl"
     inreplace "php.ini-development", %r{; ?extension_dir = "\./"},
               "extension_dir = \"#{HOMEBREW_PREFIX}/lib/php/pecl/#{orig_ext_dir}\""
+
+    # Use OpenSSL cert bundle
+    inreplace "php.ini-development", /; ?openssl\.cafile=/,
+      "openssl.cafile = \"#{HOMEBREW_PREFIX}/etc/openssl/cert.pem\""
+    inreplace "php.ini-development", /; ?openssl\.capath=/,
+      "openssl.capath = \"#{HOMEBREW_PREFIX}/etc/openssl/certs\""
 
     config_files = {
         "php.ini-development"   => "php.ini",

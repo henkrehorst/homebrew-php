@@ -1,15 +1,13 @@
 #!/bin/bash
-brew tap henkrehorst/homebrew-php
-brew install --verbose --build-bottle valet-php@$PHPV
-brew bottle valet-php@$PHPV --json
-#         Get bottle data for transfer to bintray
+brew install --build-bottle Formula/valet-php@"$PHPV".rb
+brew bottle valet-php@$PHPV --json --force-core-tap
 brew install jq
 bottleJson=$( cat *.json )
-FILENAME=$(echo $bottleJson | jq --raw-output '."henkrehorst/php/valet-php@'"$PHPV"'"."bottle".tags.'"$OS"'.filename')
+FILENAME=$(echo $bottleJson | jq --raw-output '."valet-php@'"$PHPV"'"."bottle".tags.'"$OS"'.filename')
 echo $FILENAME
-LOCALFILE=$(echo $bottleJson | jq --raw-output '."henkrehorst/php/valet-php@'"$PHPV"'"."bottle".tags.'"$OS"'.local_filename')
+LOCALFILE=$(echo $bottleJson | jq --raw-output '."valet-php@'"$PHPV"'"."bottle".tags.'"$OS"'.local_filename')
 echo $LOCALFILE
 ls -all
 #         Transfer to bintray
-curl -T $LOCALFILE -uhenkrehorst:$BINTRAY_KEY https://api.bintray.com/content/henkrehorst/homebrew-php/valet-php/valet-php/$FILENAME
-curl -T *.json -uhenkrehorst:$BINTRAY_KEY https://api.bintray.com/content/henkrehorst/homebrew-php/valet-php/valet-php/newvalet-php@$PHPV.$OS.json
+curl -T $LOCALFILE -uhenkrehorst:$BINTRAY_KEY https://api.bintray.com/content/henkrehorst/homebrew-php/valet-php/php-2020/$FILENAME
+curl -T *.json -uhenkrehorst:$BINTRAY_KEY https://api.bintray.com/content/henkrehorst/homebrew-php/valet-php/php-2020/newvalet-php@$PHPV.$OS.json
