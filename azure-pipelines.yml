@@ -15,6 +15,8 @@ pool:
 variables:
   updateid: $(update-id)
   os: $(osName)
+  bintraytoken: $(BINTRAYKEY)
+  automationtoken: $(APITOKEN)
 
 # build php binary and publish on bintray
 steps:
@@ -48,12 +50,12 @@ steps:
   displayName: 'Show files (for debugging purpose)'
 
 - script: |
-    curl -T $LOCALFILE -uhenkrehorst:$(BINTRAYKEY) https://api.bintray.com/content/henkrehorst/"$PACKAGE_REPOSITORY"/php-"$PHPV"/"$BUILD_VERSION"/$FILENAME
+    curl -T $LOCALFILE -uhenkrehorst:$BINTRAYTOKEN https://api.bintray.com/content/henkrehorst/"$PACKAGEREPOSITORY"/php-"$PHPV"/"$BUILDVERSION"/$FILENAME
   condition: eq(variables['apiCall'], true)
   displayName: 'Transfer valet-php binary to bintray'
 
 - script: |
-    curl --location --request POST $AUTOMATION_ENDPOINT'/platform/update/'"$UPDATE_ID"'' --header 'token: '"$APITOKEN"'' --form 'bottle_hash='"$SHA256"''
+    curl --location --request POST $AUTOMATIONENDPOINT'/platform/update/'"$UPDATEID"'' --header 'token: '"$AUTOMATIONTOKEN"'' --form 'bottle_hash='"$SHA256"''
   condition: eq(variables['apiCall'], true)
   displayName: 'Transfer bottle hash to automation app'
 
