@@ -9,17 +9,17 @@ strategy:
   matrix:
     catalina:
       imageName: 'macOS-10.15'
-      updateId: $(catalina-update-id)
+      update-Id: $(catalina-update-id)
 
 pool:
   vmImage: $(imageName)
 
 variables:
-  update-id: $(updateId)
+  updateid: $(update-id)
 
 
 steps:
-- script: echo $UPDATE-ID
+- script: echo $UPDATEID
   condition: eq(variables['apiCall'], true)
   displayName: ''
 - script: echo do nothing
