@@ -34,6 +34,7 @@ steps:
   displayName: 'Install jq (command for parsing json file)'
 
 - script: |
+    bottleJson=$( cat *.json )
     FILENAME=$(echo $bottleJson | jq --raw-output '."valet-php@'"$PHPV"'"."bottle".tags.'"$OS"'.filename')
     echo $FILENAME
     LOCALFILE=$(echo $bottleJson | jq --raw-output '."valet-php@'"$PHPV"'"."bottle".tags.'"$OS"'.local_filename')
