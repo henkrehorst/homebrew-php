@@ -13,6 +13,6 @@ pool:
 
 steps:
 - script: echo I did a thing
-  condition: eq('$(doThing)', True)
+  condition: eq($(doThing), True)
 - script: echo do nothing
-  condition: eq('$(doThing)', false)
+  condition: eq($(doThing), False)
