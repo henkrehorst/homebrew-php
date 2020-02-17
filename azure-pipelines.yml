@@ -1,0 +1,31 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger: none
+
+strategy:
+  matrix:
+    catalina:
+      imageName: 'macOS-10.15'
+      update-Id: $(catalina-update-id)
+      osName: "catalina"
+
+pool:
+  vmImage: $(imageName)
+
+variables:
+  updateid: $(update-id)
+  os: $(osName)
+
+
+steps:
+- script: echo $UPDATEID
+  condition: eq(variables['apiCall'], true)
+  displayName: ''
+- script: echo $OS
+  condition: eq(variables['apiCall'], true)
+  displayName: ''
+- script: echo do nothing
+  condition: eq(variables['apiCall'], true)
