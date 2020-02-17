@@ -48,7 +48,7 @@ steps:
   displayName: 'Show files (for debugging purpose)'
 
 - script: |
-    curl -T $LOCALFILE -uhenkrehorst:$BINTRAY_KEY https://api.bintray.com/content/henkrehorst/"$PACKAGE_REPOSITORY"/php-"$PHPV"/"$BUILD_VERSION"/$FILENAME
+    curl -T $LOCALFILE -uhenkrehorst:$BINTRAYKEY https://api.bintray.com/content/henkrehorst/"$PACKAGE_REPOSITORY"/php-"$PHPV"/"$BUILD_VERSION"/$FILENAME
   condition: eq(variables['apiCall'], true)
   displayName: 'Transfer valet-php binary to bintray'
 
