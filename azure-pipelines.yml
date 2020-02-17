@@ -1,10 +1,6 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
-
 trigger: none
 
+# Build package on macos catalina
 strategy:
   matrix:
     catalina:
@@ -15,17 +11,51 @@ strategy:
 pool:
   vmImage: $(imageName)
 
+# set os specific variables
 variables:
   updateid: $(update-id)
   os: $(osName)
 
-
+# build php binary and publish on bintray
 steps:
-- script: echo $UPDATEID
+- script: |
+    brew install --build-bottle Formula/valet-php@"$PHPV".rb
   condition: eq(variables['apiCall'], true)
-  displayName: ''
-- script: echo $OS
+  displayName: 'Build and install valet-php'
+
+- script: |
+    brew bottle valet-php@$PHPV --json --force-core-tap
   condition: eq(variables['apiCall'], true)
-  displayName: ''
-- script: echo do nothing
+  displayName: 'Bottle valet-php to binary package'
+
+- script: |
+    brew install jq
   condition: eq(variables['apiCall'], true)
+  displayName: 'Install jq (command for parsing json file)'
+
+- script: |
+    FILENAME=$(echo $bottleJson | jq --raw-output '."valet-php@'"$PHPV"'"."bottle".tags.'"$OS"'.filename')
+    echo $FILENAME
+    LOCALFILE=$(echo $bottleJson | jq --raw-output '."valet-php@'"$PHPV"'"."bottle".tags.'"$OS"'.local_filename')
+    echo $LOCALFILE
+    SHA256=$(echo $bottleJson | jq --raw-output '."valet-php@'"$PHPV"'"."bottle".tags.'"$OS"'.sha256')
+    echo $SHA256
+  condition: eq(variables['apiCall'], true)
+  displayName: 'Get filename, localname and SHA256 from json file'
+
+- script: ls -all
+  condition: eq(variables['apiCall'], true)
+  displayName: 'Show files (for debugging purpose)'
+
+- script: |
+    curl -T $LOCALFILE -uhenkrehorst:$BINTRAY_KEY https://api.bintray.com/content/henkrehorst/"$PACKAGE_REPOSITORY"/php-"$PHPV"/"$BUILD_VERSION"/$FILENAME
+  condition: eq(variables['apiCall'], true)
+  displayName: 'Transfer valet-php binary to bintray'
+
+- script: |
+    curl --location --request POST $AUTOMATION_ENDPOINT'/platform/update/'"$UPDATE_ID"'' \
+    --header 'token: '"$APITOKEN"'' \
+    --form 'bottle_hash='"$SHA256"''
+  condition: eq(variables['apiCall'], true)
+  displayName: 'Transfer bottle hash to automation app'
+
