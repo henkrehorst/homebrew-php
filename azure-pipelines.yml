@@ -10,11 +10,9 @@ trigger: none
 pool:
   vmImage: 'ubuntu-latest'
 
-parameters:
-  doThing: false
 
 steps:
 - script: echo I did a thing
-  condition: eq('${{ parameters.doThing }}', true)
+  condition: eq('$(doThing)', true)
 - script: echo do nothing
-  condition: eq('${{ parameters.doThing }}', true)
+  condition: eq('$(doThing)', false)
