@@ -5,14 +5,20 @@
 
 trigger: none
 
-
+strategy:
+  matrix:
+    catalina:
+      imageName: 'macOS-10.15'
+      env: |
+        - UPDATE_ID: $(catalina-update-id)
 
 pool:
-  vmImage: 'ubuntu-latest'
+  vmImage: $(imageName)
 
 
 steps:
-- script: echo I did a thing
-  condition: eq(variables['doThing'], true)
+- script: echo $UPDATE_ID
+  condition: eq(variables['apiCall'], true)
+  displayName: ''
 - script: echo do nothing
-  condition: eq(variables['doThing'], false)
+  condition: eq(variables['apiCall'], true)
