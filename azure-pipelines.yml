@@ -5,11 +5,13 @@
 
 trigger: none
 
-parameters:
-  doThing: false
+
 
 pool:
   vmImage: 'ubuntu-latest'
+
+parameters:
+  doThing: false
 
 steps:
 - script: echo I did a thing
