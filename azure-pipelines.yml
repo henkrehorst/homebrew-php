@@ -10,7 +10,7 @@ strategy:
     catalina:
       imageName: 'macOS-10.15'
       env: |
-        - UPDATE_ID: $(catalina-update-id)
+        - UPDATE_ID: $[variables.catalina-update-id]
 
 pool:
   vmImage: $(imageName)
