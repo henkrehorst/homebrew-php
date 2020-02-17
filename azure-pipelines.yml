@@ -9,7 +9,7 @@ strategy:
   matrix:
     catalina:
       imageName: 'macOS-10.15'
-      variables:
+      variables: |
         test: 'tress'
 
 pool:
