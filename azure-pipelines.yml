@@ -9,11 +9,12 @@ strategy:
   matrix:
     catalina:
       imageName: 'macOS-10.15'
-      variables: |
+      imageVariables: |
         test: 'tress'
 
 pool:
   vmImage: $(imageName)
+  variables: $(imageVariables)
 
 
 steps:
