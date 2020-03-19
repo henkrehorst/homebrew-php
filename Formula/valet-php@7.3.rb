@@ -6,9 +6,9 @@ class ValetPhpAT73 < Formula
 
   bottle do
     root_url "https://dl.bintray.com/henkrehorst/valet-php"
-    sha256 "12e672eebac60f0f702252697f51adaf3a9dd26cf0a4c5e008c51acdcd74c875" => :high_sierra
-    sha256 "4b22fafe47879bff6ec4b730e545d89239323bf764a178fcdfba0a000424f869" => :mojave
-    sha256 "60ff0bc0099489d2bfec6d0a88991acac607dab85fc202f018cd44dc86965dda" => :catalina
+    sha256 "7a55cb9971c0e6c109906272a86dc904ddf5a6958140f92e0a41c7b7c73a6ef8" => :catalina
+    sha256 "d2b73370bb3aeb07d5daac9152e56f8515705a9b83e85ce0c43778cce2aeea36" => :mojave
+    sha256 "741a729c3153de2d8a773c1f44aee8e2ce979f511bcf4e1c92a869ee13229709" => :high_sierra
   end
 
   keg_only :versioned_formula
