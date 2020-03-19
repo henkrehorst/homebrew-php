@@ -1,14 +1,14 @@
 class ValetPhpAT72 < Formula
   desc "General-purpose scripting language"
   homepage "https://www.php.net/"
-  url "https://www.php.net/distributions/php-7.2.28.tar.xz"
-  sha256 "afe1863301da572dee2e0bad8014813bcced162f980ddc8ec8e41fd72263eb2d"
+  url "https://www.php.net/distributions/php-7.2.29.tar.xz"
+  sha256 "b117de74136bf4b439d663be9cf0c8e06a260c1f340f6b75ccadb609153a7fe8"
 
   bottle do
     root_url "https://dl.bintray.com/henkrehorst/valet-php-test"
-    sha256 "ef532fde2d21de4781793ef0b69de5724b769cf040929534b5e9d75bdc624b3b" => :high_sierra
-    sha256 "335a2ea1a1371854020e0ab1a6080f015d5c450fdb4d0d48f0534f24244b1d28" => :mojave
-    sha256 "43b166a7f2f2caed9ab575bcef440565ebf1c9b23c6dd688456285122ebdae37" => :catalina
+    sha256 "3eabd1cb86814fb5e1dedd7d54e27ae019ccf79721a7ad30ec477f2291d450c5" => :catalina
+    sha256 "b22a6b0923e0c3d1bf28052981d3bcf34d372fcdc39ace0ec23d3a9d0e5f036e" => :high_sierra
+    sha256 "cf84f8c7cd8564556b1546c98aeb681eecc083a14f063472be0525a1d403c1b6" => :mojave
   end
 
   keg_only :versioned_formula
