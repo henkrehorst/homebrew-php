@@ -3,12 +3,13 @@ class ValetPhpAT70 < Formula
   homepage "https://www.php.net/"
   url "https://www.php.net/distributions/php-7.0.33.tar.xz"
   sha256 "ab8c5be6e32b1f8d032909dedaaaa4bbb1a209e519abb01a52ce3914f9a13d96"
+  revision 1
 
   bottle do
     root_url "https://dl.bintray.com/henkrehorst/valet-php"
-    sha256 "8848654d2b41623bbd5416a575c3649ecec508514b5af188d7ae7611c0723837" => :catalina
-    sha256 "aa02ec75e268791be6f1ec367791aaf4db55fd739db99721eee0b85cef1b34b1" => :high_sierra
-    sha256 "945a9bbd11554c4901b5bcbad5e4abc0be89218c17d65d5a98e34f62c0d11c24" => :mojave
+    sha256 "61e596febc4e146fb1607a0d1c884b19e66e9f300588301405118c803d35d315" => :catalina
+    sha256 "204f62fc08a19d7b8e555763b2e577a63ee06f35e01c1ce3003ab5b4147fc03f" => :high_sierra
+    sha256 "d6cd484f537f517c2af4a0f559d0d226419f5a000d68d06af9be28c512e4b98e" => :mojave
   end
 
   keg_only :versioned_formula
