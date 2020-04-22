@@ -19,6 +19,8 @@ variables:
 # build php binary and publish on bintray
 steps:
   - bash: |
+      brew update
+      brew upgrade
       brew install --build-bottle Formula/valet-php@"$PHPV".rb
     condition: eq(variables['apiCall'], true)
     displayName: 'Build and install valet-php'
