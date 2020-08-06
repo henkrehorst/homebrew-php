@@ -1,8 +1,8 @@
 class ValetPhpAT72 < Formula
   desc "General-purpose scripting language"
   homepage "https://www.php.net/"
-  url "https://www.php.net/distributions/php-7.2.30.tar.xz"
-  sha256 "aa93df27b58a45d6c9800ac813245dfdca03490a918ebe515b3a70189b1bf8c3"
+  url "https://www.php.net/distributions/php-7.2.33.tar.xz"
+  sha256 "0f160a3483ffce36be5962fab7bcf09d605ee66c5707df83e4195cb796bbb03a"
 
   bottle do
     root_url "https://dl.bintray.com/henkrehorst/valet-php-test"
