@@ -7,6 +7,10 @@ strategy:
       imageName: 'macOS-10.15'
       update-Id: $(catalina-update-id)
       osName: "catalina"
+    mojave:
+      imageName: 'macOS-10.14'
+      osName: "mojave"
+      update-Id: $(mojave-update-id)
 
 pool:
   vmImage: $(imageName)
