@@ -7,6 +7,10 @@ strategy:
       imageName: 'macOS-10.15'
       update-Id: $(catalina-update-id)
       osName: "catalina"
+    mojave:
+      imageName: 'macOS-10.14'
+      osName: "mojave"
+      update-Id: $(mojave-update-id)
 
 pool:
   vmImage: $(imageName)
@@ -18,47 +22,48 @@ variables:
 
 # build php binary and publish on bintray
 steps:
-- bash: |
-    brew install --build-bottle Formula/valet-php@"$PHPV".rb
-  condition: eq(variables['apiCall'], true)
-  displayName: 'Build and install valet-php'
+  - bash: |
+      brew update
+      brew upgrade
+      brew install --build-bottle Formula/valet-php@"$PHPV".rb
+    condition: eq(variables['apiCall'], true)
+    displayName: 'Build and install valet-php'
 
-- bash: |
-    brew bottle valet-php@$PHPV --json --force-core-tap
-  condition: eq(variables['apiCall'], true)
-  displayName: 'Bottle valet-php to binary package'
+  - bash: |
+      brew bottle valet-php@$PHPV --json --force-core-tap
+    condition: eq(variables['apiCall'], true)
+    displayName: 'Bottle valet-php to binary package'
 
-- bash: |
-    brew install jq
-  condition: eq(variables['apiCall'], true)
-  displayName: 'Install jq (command for parsing json file)'
+  - bash: |
+      brew install jq
+    condition: eq(variables['apiCall'], true)
+    displayName: 'Install jq (command for parsing json file)'
 
-- bash: |
-    bottleJson=$( cat *.json )
-    FILENAME=$(echo $bottleJson | jq --raw-output '."valet-php@'"$PHPV"'"."bottle".tags.'"$OS"'.filename')
-    echo "##vso[task.setvariable variable=FILENAME]$FILENAME"
-    LOCALFILE=$(echo $bottleJson | jq --raw-output '."valet-php@'"$PHPV"'"."bottle".tags.'"$OS"'.local_filename')
-    echo "##vso[task.setvariable variable=LOCALFILE]$LOCALFILE"
-    SHA256=$(echo $bottleJson | jq --raw-output '."valet-php@'"$PHPV"'"."bottle".tags.'"$OS"'.sha256')
-    echo "##vso[task.setvariable variable=SHA256]$SHA256"
-  condition: eq(variables['apiCall'], true)
-  displayName: 'Get filename, localname and SHA256 from json file'
+  - bash: |
+      bottleJson=$( cat *.json )
+      FILENAME=$(echo $bottleJson | jq --raw-output '."valet-php@'"$PHPV"'"."bottle".tags.'"$OS"'.filename')
+      echo "##vso[task.setvariable variable=FILENAME]$FILENAME"
+      LOCALFILE=$(echo $bottleJson | jq --raw-output '."valet-php@'"$PHPV"'"."bottle".tags.'"$OS"'.local_filename')
+      echo "##vso[task.setvariable variable=LOCALFILE]$LOCALFILE"
+      SHA256=$(echo $bottleJson | jq --raw-output '."valet-php@'"$PHPV"'"."bottle".tags.'"$OS"'.sha256')
+      echo "##vso[task.setvariable variable=SHA256]$SHA256"
+    condition: eq(variables['apiCall'], true)
+    displayName: 'Get filename, localname and SHA256 from json file'
 
-- bash: ls -all
-  condition: eq(variables['apiCall'], true)
-  displayName: 'Show files (for debugging purpose)'
+  - bash: ls -all
+    condition: eq(variables['apiCall'], true)
+    displayName: 'Show files (for debugging purpose)'
 
-- bash: |
-    curl -T $LOCALFILE -uhenkrehorst:$BINTRAYAPITOKEN https://api.bintray.com/content/henkrehorst/"$PACKAGEREPOSITORY"/php-"$PHPV"/"$BUILDVERSION"/$FILENAME
-  condition: eq(variables['apiCall'], true)
-  env:
+  - bash: |
+      curl -T $LOCALFILE -uhenkrehorst:$BINTRAYAPITOKEN https://api.bintray.com/content/henkrehorst/"$PACKAGEREPOSITORY"/php-"$PHPV"/"$BUILDVERSION"/$FILENAME
+    condition: eq(variables['apiCall'], true)
+    env:
       BINTRAYAPITOKEN: $(BINTRAYKEY)
-  displayName: 'Transfer valet-php binary to bintray'
+    displayName: 'Transfer valet-php binary to bintray'
 
-- bash: |
-    curl --location --request POST $AUTOMATIONENDPOINT'/platform/update/'"$UPDATEID"'' --header 'token: '"$AUTOMATIONTOKEN"'' --form 'bottle_hash='"$SHA256"''
-  condition: eq(variables['apiCall'], true)
-  env:
+  - bash: |
+      curl --location --request POST $AUTOMATIONENDPOINT'/platform/update/'"$UPDATEID"'' --header 'token: '"$AUTOMATIONTOKEN"'' --form 'bottle_hash='"$SHA256"''
+    condition: eq(variables['apiCall'], true)
+    env:
       AUTOMATIONTOKEN: $(APITOKEN)
-  displayName: 'Transfer bottle hash to automation app'
-
+    displayName: 'Transfer bottle hash to automation app'
