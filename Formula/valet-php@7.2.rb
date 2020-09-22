@@ -3,7 +3,7 @@ class ValetPhpAT72 < Formula
   homepage "https://www.php.net/"
   url "https://www.php.net/distributions/php-7.2.33.tar.xz"
   sha256 "0f160a3483ffce36be5962fab7bcf09d605ee66c5707df83e4195cb796bbb03a"
-  revision 1
+  revision 2
 
   bottle do
     root_url "https://dl.bintray.com/henkrehorst/valet-php"
