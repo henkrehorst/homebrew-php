@@ -176,175 +176,175 @@ class ValetPhpAT72 < Formula
     (var / "log").mkpath
     touch var / "log/php-fpm.log"
   end
-end
 
-def post_install
-  pear_prefix = pkgshare / "pear"
-  pear_files = %W[
-  #{pear_prefix}/.depdblock
-      #{pear_prefix}/.filemap
-      #{pear_prefix}/.depdb
-      #{pear_prefix}/.lock
-    ]
+  def post_install
+    pear_prefix = pkgshare / "pear"
+    pear_files = %W[
+    #{pear_prefix}/.depdblock
+        #{pear_prefix}/.filemap
+        #{pear_prefix}/.depdb
+        #{pear_prefix}/.lock
+      ]
 
-  %W[
-  #{pear_prefix}/.channels
-      #{pear_prefix}/.channels/.alias
-    ].each do |f|
-    chmod 0755, f
-    pear_files.concat(Dir["#{f}/*"])
+    %W[
+    #{pear_prefix}/.channels
+        #{pear_prefix}/.channels/.alias
+      ].each do |f|
+      chmod 0755, f
+      pear_files.concat(Dir["#{f}/*"])
+    end
+
+    chmod 0644, pear_files
+
+    # Custom location for extensions installed via pecl
+    pecl_path = HOMEBREW_PREFIX / "lib/php/pecl"
+    ln_s pecl_path, prefix / "pecl" unless (prefix / "pecl").exist?
+    extension_dir = Utils.popen_read("#{bin}/php-config --extension-dir").chomp
+    php_basename = File.basename(extension_dir)
+    php_ext_dir = opt_prefix / "lib/php" / php_basename
+
+    # fix pear config to install outside cellar
+    pear_path = HOMEBREW_PREFIX / "share/pear@#{php_version}"
+    cp_r pkgshare / "pear/.", pear_path
+    {
+        "php_ini" => etc / "valet-php/#{php_version}/php.ini",
+        "php_dir" => pear_path,
+        "doc_dir" => pear_path / "doc",
+        "ext_dir" => pecl_path / php_basename,
+        "bin_dir" => opt_bin,
+        "data_dir" => pear_path / "data",
+        "cfg_dir" => pear_path / "cfg",
+        "www_dir" => pear_path / "htdocs",
+        "man_dir" => HOMEBREW_PREFIX / "share/man",
+        "test_dir" => pear_path / "test",
+        "php_bin" => opt_bin / "php",
+    }.each do |key, value|
+      value.mkpath if key =~ /(?<!bin|man)_dir$/
+      system bin / "pear", "config-set", key, value, "system"
+    end
+
+    system bin / "pear", "update-channels"
+
+    %w[
+        opcache
+      ].each do |e|
+      ext_config_path = etc / "valet-php/#{php_version}/conf.d/ext-#{e}.ini"
+      extension_type = (e == "opcache") ? "zend_extension" : "extension"
+      if ext_config_path.exist?
+        inreplace ext_config_path,
+                  /#{extension_type}=.*$/, "#{extension_type}=#{php_ext_dir}/#{e}.so"
+      else
+        ext_config_path.write <<~EOS
+          [#{e}]
+          #{extension_type}="#{php_ext_dir}/#{e}.so"
+        EOS
+      end
+    end
   end
 
-  chmod 0644, pear_files
-
-  # Custom location for extensions installed via pecl
-  pecl_path = HOMEBREW_PREFIX / "lib/php/pecl"
-  ln_s pecl_path, prefix / "pecl" unless (prefix / "pecl").exist?
-  extension_dir = Utils.popen_read("#{bin}/php-config --extension-dir").chomp
-  php_basename = File.basename(extension_dir)
-  php_ext_dir = opt_prefix / "lib/php" / php_basename
-
-  # fix pear config to install outside cellar
-  pear_path = HOMEBREW_PREFIX / "share/pear@#{php_version}"
-  cp_r pkgshare / "pear/.", pear_path
-  {
-      "php_ini" => etc / "valet-php/#{php_version}/php.ini",
-      "php_dir" => pear_path,
-      "doc_dir" => pear_path / "doc",
-      "ext_dir" => pecl_path / php_basename,
-      "bin_dir" => opt_bin,
-      "data_dir" => pear_path / "data",
-      "cfg_dir" => pear_path / "cfg",
-      "www_dir" => pear_path / "htdocs",
-      "man_dir" => HOMEBREW_PREFIX / "share/man",
-      "test_dir" => pear_path / "test",
-      "php_bin" => opt_bin / "php",
-  }.each do |key, value|
-    value.mkpath if key =~ /(?<!bin|man)_dir$/
-    system bin / "pear", "config-set", key, value, "system"
+  def caveats
+    <<~EOS
+      The php.ini and php-fpm.ini file can be found in:
+          #{etc}/php/#{php_version}/
+    EOS
   end
 
-  system bin / "pear", "update-channels"
+  def php_version
+    version.to_s.split(".")[0..1].join(".")
+  end
 
-  %w[
-      opcache
-    ].each do |e|
-    ext_config_path = etc / "valet-php/#{php_version}/conf.d/ext-#{e}.ini"
-    extension_type = (e == "opcache") ? "zend_extension" : "extension"
-    if ext_config_path.exist?
-      inreplace ext_config_path,
-                /#{extension_type}=.*$/, "#{extension_type}=#{php_ext_dir}/#{e}.so"
-    else
-      ext_config_path.write <<~EOS
-        [#{e}]
-        #{extension_type}="#{php_ext_dir}/#{e}.so"
+  plist_options :manual => "php-fpm"
+
+  def plist
+    <<~EOS
+      <?xml version="1.0" encoding="UTF-8"?>
+      <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+      <plist version="1.0">
+        <dict>
+          <key>KeepAlive</key>
+          <true/>
+          <key>Label</key>
+          <string>#{plist_name}</string>
+          <key>ProgramArguments</key>
+          <array>
+            <string>#{opt_sbin}/php-fpm</string>
+            <string>--nodaemonize</string>
+          </array>
+          <key>RunAtLoad</key>
+          <true/>
+          <key>WorkingDirectory</key>
+          <string>#{var}</string>
+          <key>StandardErrorPath</key>
+          <string>#{var}/log/php-fpm.log</string>
+        </dict>
+      </plist>
+    EOS
+  end
+
+  test do
+    assert_match /^Zend OPcache$/, shell_output("#{bin}/php -i"),
+                 "Zend OPCache extension not loaded"
+    # Test related to libxml2 and
+    # https://github.com/Homebrew/homebrew-core/issues/28398
+    assert_includes MachO::Tools.dylibs("#{bin}/php"),
+                    "#{Formula["libpq"].opt_lib}/libpq.5.dylib"
+    system "#{sbin}/php-fpm", "-t"
+    system "#{bin}/phpdbg", "-V"
+    system "#{bin}/php-cgi", "-m"
+    # Prevent SNMP extension to be added
+    assert_no_match /^snmp$/, shell_output("#{bin}/php -m"),
+                    "SNMP extension doesn't work reliably with Homebrew on High Sierra"
+    begin
+      require "socket"
+
+      server = TCPServer.new(0)
+      port = server.addr[1]
+      server_fpm = TCPServer.new(0)
+      port_fpm = server_fpm.addr[1]
+      server.close
+      server_fpm.close
+
+      expected_output = /^Hello world!$/
+      (testpath / "index.php").write <<~EOS
+        <?php
+        echo 'Hello world!' . PHP_EOL;
+        var_dump(ldap_connect());
       EOS
-    end
-  end
-end
 
-def caveats
-  <<~EOS
-    The php.ini and php-fpm.ini file can be found in:
-        #{etc}/php/#{php_version}/
-  EOS
-end
+      (testpath / "fpm.conf").write <<~EOS
+        [global]
+        daemonize=no
+        [www]
+        listen = 127.0.0.1:#{port_fpm}
+        pm = dynamic
+        pm.max_children = 5
+        pm.start_servers = 2
+        pm.min_spare_servers = 1
+        pm.max_spare_servers = 3
+      EOS
 
-def php_version
-  version.to_s.split(".")[0..1].join(".")
-end
+      sleep 3
 
-plist_options :manual => "php-fpm"
+      assert_match expected_output, shell_output("curl -s 127.0.0.1:#{port}")
 
-def plist
-  <<~EOS
-    <?xml version="1.0" encoding="UTF-8"?>
-    <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-    <plist version="1.0">
-      <dict>
-        <key>KeepAlive</key>
-        <true/>
-        <key>Label</key>
-        <string>#{plist_name}</string>
-        <key>ProgramArguments</key>
-        <array>
-          <string>#{opt_sbin}/php-fpm</string>
-          <string>--nodaemonize</string>
-        </array>
-        <key>RunAtLoad</key>
-        <true/>
-        <key>WorkingDirectory</key>
-        <string>#{var}</string>
-        <key>StandardErrorPath</key>
-        <string>#{var}/log/php-fpm.log</string>
-      </dict>
-    </plist>
-  EOS
-end
-
-test do
-  assert_match /^Zend OPcache$/, shell_output("#{bin}/php -i"),
-               "Zend OPCache extension not loaded"
-  # Test related to libxml2 and
-  # https://github.com/Homebrew/homebrew-core/issues/28398
-  assert_includes MachO::Tools.dylibs("#{bin}/php"),
-                  "#{Formula["libpq"].opt_lib}/libpq.5.dylib"
-  system "#{sbin}/php-fpm", "-t"
-  system "#{bin}/phpdbg", "-V"
-  system "#{bin}/php-cgi", "-m"
-  # Prevent SNMP extension to be added
-  assert_no_match /^snmp$/, shell_output("#{bin}/php -m"),
-                  "SNMP extension doesn't work reliably with Homebrew on High Sierra"
-  begin
-    require "socket"
-
-    server = TCPServer.new(0)
-    port = server.addr[1]
-    server_fpm = TCPServer.new(0)
-    port_fpm = server_fpm.addr[1]
-    server.close
-    server_fpm.close
-
-    expected_output = /^Hello world!$/
-    (testpath / "index.php").write <<~EOS
-      <?php
-      echo 'Hello world!' . PHP_EOL;
-      var_dump(ldap_connect());
-    EOS
-
-    (testpath / "fpm.conf").write <<~EOS
-      [global]
-      daemonize=no
-      [www]
-      listen = 127.0.0.1:#{port_fpm}
-      pm = dynamic
-      pm.max_children = 5
-      pm.start_servers = 2
-      pm.min_spare_servers = 1
-      pm.max_spare_servers = 3
-    EOS
-
-    sleep 3
-
-    assert_match expected_output, shell_output("curl -s 127.0.0.1:#{port}")
-
-    Process.kill("TERM", pid)
-    Process.wait(pid)
-
-    fpm_pid = fork do
-      exec sbin / "php-fpm", "-y", "fpm.conf"
-    end
-    sleep 3
-
-    assert_match expected_output, shell_output("curl -s 127.0.0.1:#{port}")
-  ensure
-    if pid
       Process.kill("TERM", pid)
       Process.wait(pid)
-    end
-    if fpm_pid
-      Process.kill("TERM", fpm_pid)
-      Process.wait(fpm_pid)
+
+      fpm_pid = fork do
+        exec sbin / "php-fpm", "-y", "fpm.conf"
+      end
+      sleep 3
+
+      assert_match expected_output, shell_output("curl -s 127.0.0.1:#{port}")
+    ensure
+      if pid
+        Process.kill("TERM", pid)
+        Process.wait(pid)
+      end
+      if fpm_pid
+        Process.kill("TERM", fpm_pid)
+        Process.wait(fpm_pid)
+      end
     end
   end
 end
