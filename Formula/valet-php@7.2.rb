@@ -53,25 +53,23 @@ class ValetPhpAT72 < Formula
     # buildconf required due to system library linking bug patch
     system "./buildconf", "--force"
 
-  end
+    inreplace "sapi/fpm/php-fpm.conf.in", ";daemonize = yes", "daemonize = no"
 
-  inreplace "sapi/fpm/php-fpm.conf.in", ";daemonize = yes", "daemonize = no"
+    # Required due to icu4c dependency
+    ENV.cxx11
 
-  # Required due to icu4c dependency
-  ENV.cxx11
+    config_path = etc / "valet-php/#{php_version}"
+    # Prevent system pear config from inhibiting pear install
+    (config_path / "pear.conf").delete if (config_path / "pear.conf").exist?
 
-  config_path = etc / "valet-php/#{php_version}"
-  # Prevent system pear config from inhibiting pear install
-  (config_path / "pear.conf").delete if (config_path / "pear.conf").exist?
+    # Prevent homebrew from harcoding path to sed shim in phpize script
+    ENV["lt_cv_path_SED"] = "sed"
 
-  # Prevent homebrew from harcoding path to sed shim in phpize script
-  ENV["lt_cv_path_SED"] = "sed"
+    # Each extension that is built on Mojave needs a direct reference to the
+    # sdk path or it won't find the headers
+    headers_path = "=#{MacOS.sdk_path_if_needed}/usr"
 
-  # Each extension that is built on Mojave needs a direct reference to the
-  # sdk path or it won't find the headers
-  headers_path = "=#{MacOS.sdk_path_if_needed}/usr"
-
-  args = %W[
+    args = %W[
       --prefix=#{prefix}
       --localstatedir=#{var}
       --sysconfdir=#{config_path}
@@ -142,39 +140,40 @@ class ValetPhpAT72 < Formula
       --with-xmlrpc
       --with-xsl#{headers_path}
       --with-zlib#{headers_path}
-  ]
+    ]
 
-  system "./configure", *args
-  system "make"
-  system "make", "install"
+    system "./configure", *args
+    system "make"
+    system "make", "install"
 
-  # Allow pecl to install outside of Cellar
-  extension_dir = Utils.popen_read("#{bin}/php-config --extension-dir").chomp
-  orig_ext_dir = File.basename(extension_dir)
-  inreplace bin / "php-config", lib / "php", prefix / "pecl"
-  inreplace "php.ini-development", %r{; ?extension_dir = "\./"},
-            "extension_dir = \"#{HOMEBREW_PREFIX}/lib/php/pecl/#{orig_ext_dir}\""
+    # Allow pecl to install outside of Cellar
+    extension_dir = Utils.popen_read("#{bin}/php-config --extension-dir").chomp
+    orig_ext_dir = File.basename(extension_dir)
+    inreplace bin / "php-config", lib / "php", prefix / "pecl"
+    inreplace "php.ini-development", %r{; ?extension_dir = "\./"},
+              "extension_dir = \"#{HOMEBREW_PREFIX}/lib/php/pecl/#{orig_ext_dir}\""
 
-  # Use OpenSSL cert bundle
-  inreplace "php.ini-development", /; ?openssl\.cafile=/,
-            "openssl.cafile = \"#{HOMEBREW_PREFIX}/etc/openssl/cert.pem\""
-  inreplace "php.ini-development", /; ?openssl\.capath=/,
-            "openssl.capath = \"#{HOMEBREW_PREFIX}/etc/openssl/certs\""
+    # Use OpenSSL cert bundle
+    inreplace "php.ini-development", /; ?openssl\.cafile=/,
+              "openssl.cafile = \"#{HOMEBREW_PREFIX}/etc/openssl/cert.pem\""
+    inreplace "php.ini-development", /; ?openssl\.capath=/,
+              "openssl.capath = \"#{HOMEBREW_PREFIX}/etc/openssl/certs\""
 
-  config_files = {
-      "php.ini-development" => "php.ini",
-      "sapi/fpm/php-fpm.conf" => "php-fpm.conf",
-      "sapi/fpm/www.conf" => "php-fpm.d/www.conf",
-  }
-  config_files.each_value do |dst|
-    dst_default = config_path / "#{dst}.default"
-    rm dst_default if dst_default.exist?
-  end
-  config_path.install config_files
+    config_files = {
+        "php.ini-development" => "php.ini",
+        "sapi/fpm/php-fpm.conf" => "php-fpm.conf",
+        "sapi/fpm/www.conf" => "php-fpm.d/www.conf",
+    }
+    config_files.each_value do |dst|
+      dst_default = config_path / "#{dst}.default"
+      rm dst_default if dst_default.exist?
+    end
+    config_path.install config_files
 
-  unless (var / "log/php-fpm.log").exist?
-    (var / "log").mkpath
-    touch var / "log/php-fpm.log"
+    unless (var / "log/php-fpm.log").exist?
+      (var / "log").mkpath
+      touch var / "log/php-fpm.log"
+    end
   end
 
   def post_install
@@ -323,12 +322,7 @@ class ValetPhpAT72 < Formula
         pm.max_spare_servers = 3
       EOS
 
-      sleep 3
-
       assert_match expected_output, shell_output("curl -s 127.0.0.1:#{port}")
-
-      Process.kill("TERM", pid)
-      Process.wait(pid)
 
       fpm_pid = fork do
         exec sbin / "php-fpm", "-y", "fpm.conf"
@@ -337,10 +331,6 @@ class ValetPhpAT72 < Formula
 
       assert_match expected_output, shell_output("curl -s 127.0.0.1:#{port}")
     ensure
-      if pid
-        Process.kill("TERM", pid)
-        Process.wait(pid)
-      end
       if fpm_pid
         Process.kill("TERM", fpm_pid)
         Process.wait(fpm_pid)
