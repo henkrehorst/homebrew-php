@@ -23,6 +23,7 @@ variables:
 # build php binary and publish on bintray
 steps:
   - bash: |
+      brew tap henkrehorst/homebrew-php
       brew update
       brew upgrade
       brew install --build-bottle Formula/valet-php@"$PHPV".rb
