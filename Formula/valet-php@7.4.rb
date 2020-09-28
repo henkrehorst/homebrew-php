@@ -324,8 +324,6 @@ class ValetPhpAT74 < Formula
       EOS
       sleep 3
 
-      assert_match expected_output, shell_output("curl -s 127.0.0.1:#{port}")
-
       fpm_pid = fork do
         exec sbin/"php-fpm", "-y", "fpm.conf"
       end

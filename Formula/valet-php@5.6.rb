@@ -316,8 +316,6 @@ class ValetPhpAT56 < Formula
         pm.max_spare_servers = 3
       EOS
 
-      assert_match expected_output, shell_output("curl -s 127.0.0.1:#{port}")
-
       fpm_pid = fork do
         exec sbin/"php-fpm", "-y", "fpm.conf"
       end
