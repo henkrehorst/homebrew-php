@@ -322,7 +322,6 @@ class ValetPhpAT74 < Formula
         pm.min_spare_servers = 1
         pm.max_spare_servers = 3
       EOS
-      sleep 3
 
       fpm_pid = fork do
         exec sbin/"php-fpm", "-y", "fpm.conf"
