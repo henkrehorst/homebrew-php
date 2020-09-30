@@ -23,6 +23,10 @@ variables:
 # build php binary and publish on bintray
 steps:
   - bash: |
+      brew install --help
+    displayName: 'Debug'
+
+  - bash: |
       brew update
       brew upgrade
       brew install --build-bottle Formula/valet-php@"$PHPV".rb
