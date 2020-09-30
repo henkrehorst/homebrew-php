@@ -29,7 +29,9 @@ steps:
   - bash: |
       brew update
       brew upgrade
-      brew install --build-bottle Formula/valet-php@"$PHPV".rb
+      cd Formula
+      ls -all
+      brew install --build-bottle valet-php@"$PHPV".rb
     condition: eq(variables['apiCall'], true)
     displayName: 'Build and install valet-php'
 
