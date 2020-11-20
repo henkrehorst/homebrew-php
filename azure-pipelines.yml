@@ -11,6 +11,10 @@ strategy:
       imageName: 'macOS-10.14'
       osName: "mojave"
       update-Id: $(mojave-update-id)
+    big_sur:
+      imageName: 'macos-11.0'
+      osName: "big_sur"
+      update-Id: $(big_sur-update-id)
 
 pool:
   vmImage: $(imageName)
