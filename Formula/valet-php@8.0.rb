@@ -4,6 +4,7 @@ class ValetPhpAT80 < Formula
   url "https://www.php.net/distributions/php-8.0.0.tar.xz"
   sha256 "b5278b3eef584f0c075d15666da4e952fa3859ee509d6b0cc2ed13df13f65ebb"
 
+
   bottle do
     root_url "https://dl.bintray.com/henkrehorst/valet-php"
     sha256 "0a0dfe81f00955ecbaf00db3207182bbdb6e6718fca4049f8cfd780a86013494" => :catalina
@@ -191,9 +192,9 @@ class ValetPhpAT80 < Formula
               "openssl.capath = \"#{openssl.pkgetc}/certs\""
 
     config_files = {
-      "php.ini-development"   => "php.ini",
-      "sapi/fpm/php-fpm.conf" => "php-fpm.conf",
-      "sapi/fpm/www.conf"     => "php-fpm.d/www.conf",
+        "php.ini-development"   => "php.ini",
+        "sapi/fpm/php-fpm.conf" => "php-fpm.conf",
+        "sapi/fpm/www.conf"     => "php-fpm.d/www.conf",
     }
     config_files.each_value do |dst|
       dst_default = config_path/"#{dst}.default"
@@ -234,7 +235,7 @@ class ValetPhpAT80 < Formula
     php_ext_dir = opt_prefix/"lib/php"/php_basename
 
     # fix pear config to install outside cellar
-    pear_path = HOMEBREW_PREFIX/"share/pear@#{php_version}"
+    pear_path = HOMEBREW_PREFIX/"share/pear/#{php_version}"
     cp_r pkgshare/"pear/.", pear_path
     {
         "php_ini"  => etc/"valet-php/#{php_version}/php.ini",
@@ -262,7 +263,7 @@ class ValetPhpAT80 < Formula
       extension_type = (e == "opcache") ? "zend_extension" : "extension"
       if ext_config_path.exist?
         inreplace ext_config_path,
-          /#{extension_type}=.*$/, "#{extension_type}=#{php_ext_dir}/#{e}.so"
+                  /#{extension_type}=.*$/, "#{extension_type}=#{php_ext_dir}/#{e}.so"
       else
         ext_config_path.write <<~EOS
           [#{e}]
@@ -285,7 +286,7 @@ class ValetPhpAT80 < Formula
           DirectoryIndex index.php index.html
 
       The php.ini and php-fpm.ini file can be found in:
-          #{etc}/php/#{php_version}/
+          #{etc}/valet-php/#{php_version}/
     EOS
   end
 
