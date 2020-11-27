@@ -24,6 +24,8 @@ variables:
 steps:
   - bash: |
       brew update
+#      Temp fix for failing pipeline
+      brew unpin gmp
       brew upgrade
       cd Formula
       ls -all
