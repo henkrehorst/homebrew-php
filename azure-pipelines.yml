@@ -24,8 +24,6 @@ variables:
 steps:
   - bash: |
       brew update
-      brew unpin gmp
-      brew upgrade
       cd Formula
       ls -all
       brew install --build-bottle valet-php@"$PHPV".rb
