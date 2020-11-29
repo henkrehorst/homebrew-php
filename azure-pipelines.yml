@@ -29,6 +29,10 @@ steps:
     condition: eq(variables['apiCall'], true)
     displayName: 'Uninstall conflicting brew dependencies'
 
+  - script: echo '##vso[task.setvariable variable=MD_APPLE_SDK_ROOT;]'/Applications/Xcode_12.2.app;sudo xcode-select --switch /Applications/Xcode_12.2.app/Contents/Developer
+    displayName: 'Updating xcode version'
+    condition: eq(variables['osName'], "catalina")
+
   - bash: |
       brew update
       brew upgrade
