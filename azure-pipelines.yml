@@ -23,7 +23,15 @@ variables:
 # build php binary and publish on bintray
 steps:
   - bash: |
+      brew uninstall postgresql
+      brew uninstall php
+      brew uninstall gnupg
+    condition: eq(variables['apiCall'], true)
+    displayName: 'Uninstall conflicting brew dependencies'
+
+  - bash: |
       brew update
+      brew upgrade
       cd Formula
       ls -all
       brew install --build-bottle valet-php@"$PHPV".rb
