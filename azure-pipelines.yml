@@ -35,7 +35,6 @@ steps:
 
   - bash: |
       brew update
-      brew upgrade
       cd Formula
       ls -all
       brew install --build-bottle valet-php@"$PHPV".rb
