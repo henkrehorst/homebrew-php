@@ -19,27 +19,32 @@ class ValetPhpAT74 < Formula
   depends_on "argon2"
   depends_on "aspell"
   depends_on "autoconf"
-  depends_on "curl-openssl"
+  depends_on "curl"
   depends_on "freetds"
-  depends_on "freetype"
+  depends_on "gd"
   depends_on "gettext"
   depends_on "glib"
   depends_on "gmp"
   depends_on "icu4c"
-  depends_on "jpeg"
+  depends_on "krb5"
   depends_on "libffi"
-  depends_on "libpng"
   depends_on "libpq"
   depends_on "libsodium"
-  depends_on "libyaml"
   depends_on "libzip"
   depends_on "oniguruma"
   depends_on "openldap"
   depends_on "openssl@1.1"
+  depends_on "pcre2"
   depends_on "sqlite"
   depends_on "tidy-html5"
   depends_on "unixodbc"
   depends_on "webp"
+  uses_from_macos "xz" => :build
+  uses_from_macos "bzip2"
+  uses_from_macos "libedit"
+  uses_from_macos "libxml2"
+  uses_from_macos "libxslt"
+  uses_from_macos "zlib"
 
   # PHP build system incorrectly links system libraries
   # see https://github.com/php/php-src/pull/3472
@@ -88,12 +93,8 @@ class ValetPhpAT74 < Formula
     ENV["lt_cv_path_SED"] = "sed"
 
     # system pkg-config missing
-    ENV["KERBEROS_CFLAGS"] = " "
-    ENV["KERBEROS_LIBS"] = "-lkrb5"
     ENV["SASL_CFLAGS"] = "-I#{MacOS.sdk_path_if_needed}/usr/include/sasl"
     ENV["SASL_LIBS"] = "-lsasl2"
-    ENV["EDIT_CFLAGS"] = " "
-    ENV["EDIT_LIBS"] = "-ledit"
 
     # Each extension that is built on Mojave needs a direct reference to the
     # sdk path or it won't find the headers
@@ -121,6 +122,7 @@ class ValetPhpAT74 < Formula
       --enable-mysqlnd
       --enable-pcntl
       --enable-phpdbg
+      --enable-phpdbg-readline
       --enable-phpdbg-webhelper
       --enable-shmop
       --enable-soap
@@ -131,6 +133,8 @@ class ValetPhpAT74 < Formula
       --with-apxs2=#{Formula["httpd"].opt_bin}/apxs
       --with-bz2#{headers_path}
       --with-curl
+      --with-external-gd
+      --with-external-pcre
       --with-ffi
       --with-fpm-user=_www
       --with-fpm-group=_www
@@ -153,7 +157,7 @@ class ValetPhpAT74 < Formula
       --with-password-argon2=#{Formula["argon2"].opt_prefix}
       --with-pdo-dblib=#{Formula["freetds"].opt_prefix}
       --with-pdo-mysql=mysqlnd
-      --with-pdo-odbc=unixODBC
+      --with-pdo-odbc=unixODBC,#{Formula["unixodbc"].opt_prefix}
       --with-pdo-pgsql=#{Formula["libpq"].opt_prefix}
       --with-pdo-sqlite
       --with-pgsql=#{Formula["libpq"].opt_prefix}
@@ -331,14 +335,8 @@ class ValetPhpAT74 < Formula
     assert_no_match /^snmp$/, shell_output("#{bin}/php -m"),
       "SNMP extension doesn't work reliably with Homebrew on High Sierra"
     begin
-      require "socket"
-
-      server = TCPServer.new(0)
-      port = server.addr[1]
-      server_fpm = TCPServer.new(0)
-      port_fpm = server_fpm.addr[1]
-      server.close
-      server_fpm.close
+      port = free_port
+      port_fpm = free_port
 
       expected_output = /^Hello world!$/
       (testpath/"index.php").write <<~EOS
@@ -359,10 +357,16 @@ class ValetPhpAT74 < Formula
         DirectoryIndex index.php
       EOS
 
+      php_module = if head?
+        "LoadModule php_module #{lib}/httpd/modules/libphp.so"
+      else
+        "LoadModule php7_module #{lib}/httpd/modules/libphp7.so"
+      end
+
       (testpath/"httpd.conf").write <<~EOS
         #{main_config}
         LoadModule mpm_prefork_module lib/httpd/modules/mod_mpm_prefork.so
-        LoadModule php7_module #{lib}/httpd/modules/libphp7.so
+        #{php_module}
         <FilesMatch \\.(php|phar)$>
           SetHandler application/x-httpd-php
         </FilesMatch>
