@@ -3,12 +3,12 @@ class ValetPhpAT72 < Formula
   homepage "https://www.php.net/"
   url "https://www.php.net/distributions/php-7.2.34.tar.xz"
   sha256 "409e11bc6a2c18707dfc44bc61c820ddfd81e17481470f3405ee7822d8379903"
-  revision 3
+  revision 4
 
   bottle do
     root_url "https://dl.bintray.com/henkrehorst/valet-php"
-    sha256 "8f29065fab642d26ff5b376ad8b5ef5b6599c95547cfb7ea8b3201c1a91125d2" => :mojave
-    sha256 "7d13a9b8a3503b06d9c26c7ffc008a175bcb6785e6e3eef38ad5d63be10c07e5" => :catalina
+    sha256 "01977a0d8b6b49efa3d159bf782d283ea52aef48332ae799e4782d5a4fc3561c" => :catalina
+    sha256 "ed4cb28d219e14294296ad377ffe7ba2080f417b85ec64f408d90552a9c96927" => :mojave
   end
 
   keg_only :versioned_formula
