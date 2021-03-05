@@ -1,14 +1,13 @@
 class ValetPhpAT74 < Formula
   desc "General-purpose scripting language"
   homepage "https://www.php.net/"
-  url "https://www.php.net/distributions/php-7.4.15.tar.xz"
-  sha256 "9b859c65f0cf7b3eff9d4a28cfab719fb3d36a1db3c20d874a79b5ec44d43cb8"
-  revision 1
+  url "https://www.php.net/distributions/php-7.4.16.tar.xz"
+  sha256 "1c16cefaf88ded4c92eed6a8a41eb682bb2ef42429deb55f1c4ba159053fb98b"
 
   bottle do
     root_url "https://dl.bintray.com/henkrehorst/valet-php"
-    sha256 "d26734f07f5991e0091a945e53c2ffca566c7f5649a0b278ed5dccf9ffc8df2b" => :mojave
-    sha256 "a7aab0948c3d2a0af1f55e423fb7923f91368243fe35c95e6d0bd9af80a37173" => :catalina
+    sha256 "08e4cd7edb94b68423b33c031845a1d247f925aa4f309331faa6fbd4d03d2e14" => :catalina
+    sha256 "60f3eff2af1983697f2ddb599d36ed66c48925881a4c75dcd8def036dc100ef8" => :mojave
   end
 
   keg_only :versioned_formula
