@@ -7,8 +7,8 @@ class ValetPhpAT72 < Formula
 
   bottle do
     root_url "https://dl.bintray.com/henkrehorst/valet-php"
-    sha256 "01977a0d8b6b49efa3d159bf782d283ea52aef48332ae799e4782d5a4fc3561c" => :catalina
-    sha256 "ed4cb28d219e14294296ad377ffe7ba2080f417b85ec64f408d90552a9c96927" => :mojave
+    sha256 catalina: "01977a0d8b6b49efa3d159bf782d283ea52aef48332ae799e4782d5a4fc3561c"
+    sha256 mojave:   "ed4cb28d219e14294296ad377ffe7ba2080f417b85ec64f408d90552a9c96927"
   end
 
   keg_only :versioned_formula
@@ -32,8 +32,8 @@ class ValetPhpAT72 < Formula
   depends_on "libpng"
   depends_on "libpq"
   depends_on "libsodium"
-  depends_on "libzip"
   depends_on "libyaml"
+  depends_on "libzip"
   depends_on "openldap"
   depends_on "openssl@1.1"
   depends_on "sqlite"
@@ -191,9 +191,9 @@ class ValetPhpAT72 < Formula
       "openssl.capath = \"#{openssl.pkgetc}/certs\""
 
     config_files = {
-        "php.ini-development"   => "php.ini",
-        "sapi/fpm/php-fpm.conf" => "php-fpm.conf",
-        "sapi/fpm/www.conf"     => "php-fpm.d/www.conf",
+      "php.ini-development"   => "php.ini",
+      "sapi/fpm/php-fpm.conf" => "php-fpm.conf",
+      "sapi/fpm/www.conf"     => "php-fpm.d/www.conf",
     }
     config_files.each_value do |dst|
       dst_default = config_path/"#{dst}.default"
@@ -210,14 +210,14 @@ class ValetPhpAT72 < Formula
   def post_install
     pear_prefix = pkgshare/"pear"
     pear_files = %W[
-    #{pear_prefix}/.depdblock
+      #{pear_prefix}/.depdblock
       #{pear_prefix}/.filemap
       #{pear_prefix}/.depdb
       #{pear_prefix}/.lock
     ]
 
     %W[
-    #{pear_prefix}/.channels
+      #{pear_prefix}/.channels
       #{pear_prefix}/.channels/.alias
     ].each do |f|
       chmod 0755, f
@@ -237,17 +237,17 @@ class ValetPhpAT72 < Formula
     pear_path = HOMEBREW_PREFIX/"share/pear@#{php_version}"
     cp_r pkgshare/"pear/.", pear_path
     {
-        "php_ini"  => etc/"valet-php/#{php_version}/php.ini",
-        "php_dir"  => pear_path,
-        "doc_dir"  => pear_path/"doc",
-        "ext_dir"  => pecl_path/php_basename,
-        "bin_dir"  => opt_bin,
-        "data_dir" => pear_path/"data",
-        "cfg_dir"  => pear_path/"cfg",
-        "www_dir"  => pear_path/"htdocs",
-        "man_dir"  => HOMEBREW_PREFIX/"share/man",
-        "test_dir" => pear_path/"test",
-        "php_bin"  => opt_bin/"php",
+      "php_ini"  => etc/"valet-php/#{php_version}/php.ini",
+      "php_dir"  => pear_path,
+      "doc_dir"  => pear_path/"doc",
+      "ext_dir"  => pecl_path/php_basename,
+      "bin_dir"  => opt_bin,
+      "data_dir" => pear_path/"data",
+      "cfg_dir"  => pear_path/"cfg",
+      "www_dir"  => pear_path/"htdocs",
+      "man_dir"  => HOMEBREW_PREFIX/"share/man",
+      "test_dir" => pear_path/"test",
+      "php_bin"  => opt_bin/"php",
     }.each do |key, value|
       value.mkpath if /(?<!bin|man)_dir$/.match?(key)
       system bin/"pear", "config-set", key, value, "system"
@@ -293,36 +293,37 @@ class ValetPhpAT72 < Formula
     version.to_s.split(".")[0..1].join(".")
   end
 
-  plist_options :manual => "php-fpm"
+  plist_options manual: "php-fpm"
 
-  def plist; <<~EOS
-    <?xml version="1.0" encoding="UTF-8"?>
-    <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-    <plist version="1.0">
-      <dict>
-        <key>KeepAlive</key>
-        <true/>
-        <key>Label</key>
-        <string>#{plist_name}</string>
-        <key>ProgramArguments</key>
-        <array>
-          <string>#{opt_sbin}/php-fpm</string>
-          <string>--nodaemonize</string>
-        </array>
-        <key>RunAtLoad</key>
-        <true/>
-        <key>WorkingDirectory</key>
-        <string>#{var}</string>
-        <key>StandardErrorPath</key>
-        <string>#{var}/log/php-fpm.log</string>
-      </dict>
-    </plist>
-  EOS
+  def plist
+    <<~EOS
+      <?xml version="1.0" encoding="UTF-8"?>
+      <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+      <plist version="1.0">
+        <dict>
+          <key>KeepAlive</key>
+          <true/>
+          <key>Label</key>
+          <string>#{plist_name}</string>
+          <key>ProgramArguments</key>
+          <array>
+            <string>#{opt_sbin}/php-fpm</string>
+            <string>--nodaemonize</string>
+          </array>
+          <key>RunAtLoad</key>
+          <true/>
+          <key>WorkingDirectory</key>
+          <string>#{var}</string>
+          <key>StandardErrorPath</key>
+          <string>#{var}/log/php-fpm.log</string>
+        </dict>
+      </plist>
+    EOS
   end
 
   test do
-    assert_match /^Zend OPcache$/, shell_output("#{bin}/php -i"),
-      "Zend OPCache extension not loaded"
+    assert_match(/^Zend OPcache$/, shell_output("#{bin}/php -i"),
+      "Zend OPCache extension not loaded")
     # Test related to libxml2 and
     # https://github.com/Homebrew/homebrew-core/issues/28398
     assert_includes MachO::Tools.dylibs("#{bin}/php"),
@@ -331,8 +332,8 @@ class ValetPhpAT72 < Formula
     system "#{bin}/phpdbg", "-V"
     system "#{bin}/php-cgi", "-m"
     # Prevent SNMP extension to be added
-    assert_no_match /^snmp$/, shell_output("#{bin}/php -m"),
-      "SNMP extension doesn't work reliably with Homebrew on High Sierra"
+    assert_no_match(/^snmp$/, shell_output("#{bin}/php -m"),
+      "SNMP extension doesn't work reliably with Homebrew on High Sierra")
     begin
       port = free_port
       port_fpm = free_port

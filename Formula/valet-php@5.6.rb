@@ -7,8 +7,8 @@ class ValetPhpAT56 < Formula
 
   bottle do
     root_url "https://dl.bintray.com/henkrehorst/valet-php"
-    sha256 "975e1f54eddc19f3a39416822c240135c67467e8a4f636b53039eb1c24e3136d" => :mojave
-    sha256 "0e3013ca8fad031f3267e4d13029af59bde3dbb2eb5e7c202a4a5e22f532e399" => :catalina
+    sha256 mojave:   "975e1f54eddc19f3a39416822c240135c67467e8a4f636b53039eb1c24e3136d"
+    sha256 catalina: "0e3013ca8fad031f3267e4d13029af59bde3dbb2eb5e7c202a4a5e22f532e399"
   end
 
   keg_only :versioned_formula
@@ -26,11 +26,11 @@ class ValetPhpAT56 < Formula
   depends_on "glib"
   depends_on "gmp"
   depends_on "icu4c"
-  depends_on "libyaml"
   depends_on "jpeg"
   depends_on "libpng"
   depends_on "libpq"
   depends_on "libtool"
+  depends_on "libyaml"
   depends_on "libzip"
   depends_on "mcrypt"
   depends_on "openldap"
@@ -183,7 +183,7 @@ class ValetPhpAT56 < Formula
     system "make", "install"
 
     # Allow pecl to install outside of Cellar
-    extension_dir = Utils.safe_popen_read("#{bin}/php-config --extension-dir").chomp
+    extension_dir = Utils.safe_popen_read("#{bin}/php-config", "--extension-dir").chomp
     orig_ext_dir = File.basename(extension_dir)
     inreplace bin/"php-config", lib/"php", prefix/"pecl"
     inreplace "php.ini-development", %r{; ?extension_dir = "\./"},
@@ -197,8 +197,8 @@ class ValetPhpAT56 < Formula
       "openssl.capath = \"#{openssl.pkgetc}/certs\""
 
     config_files = {
-        "php.ini-development"   => "php.ini",
-        "sapi/fpm/php-fpm.conf" => "php-fpm.conf",
+      "php.ini-development"   => "php.ini",
+      "sapi/fpm/php-fpm.conf" => "php-fpm.conf",
     }
     config_files.each_value do |dst|
       dst_default = config_path/"#{dst}.default"
@@ -215,14 +215,14 @@ class ValetPhpAT56 < Formula
   def post_install
     pear_prefix = pkgshare/"pear"
     pear_files = %W[
-    #{pear_prefix}/.depdblock
+      #{pear_prefix}/.depdblock
       #{pear_prefix}/.filemap
       #{pear_prefix}/.depdb
       #{pear_prefix}/.lock
     ]
 
     %W[
-    #{pear_prefix}/.channels
+      #{pear_prefix}/.channels
       #{pear_prefix}/.channels/.alias
     ].each do |f|
       chmod 0755, f
@@ -234,7 +234,7 @@ class ValetPhpAT56 < Formula
     # Custom location for extensions installed via pecl
     pecl_path = HOMEBREW_PREFIX/"lib/php/pecl"
     ln_s pecl_path, prefix/"pecl" unless (prefix/"pecl").exist?
-    extension_dir = Utils.safe_popen_read("#{bin}/php-config --extension-dir").chomp
+    extension_dir = Utils.safe_popen_read("#{bin}/php-config", "--extension-dir").chomp
     php_basename = File.basename(extension_dir)
     php_ext_dir = opt_prefix/"lib/php"/php_basename
 
@@ -242,17 +242,17 @@ class ValetPhpAT56 < Formula
     pear_path = HOMEBREW_PREFIX/"share/pear@#{php_version}"
     cp_r pkgshare/"pear/.", pear_path
     {
-        "php_ini"  => etc/"valet-php/#{php_version}/php.ini",
-        "php_dir"  => pear_path,
-        "doc_dir"  => pear_path/"doc",
-        "ext_dir"  => pecl_path/php_basename,
-        "bin_dir"  => opt_bin,
-        "data_dir" => pear_path/"data",
-        "cfg_dir"  => pear_path/"cfg",
-        "www_dir"  => pear_path/"htdocs",
-        "man_dir"  => HOMEBREW_PREFIX/"share/man",
-        "test_dir" => pear_path/"test",
-        "php_bin"  => opt_bin/"php",
+      "php_ini"  => etc/"valet-php/#{php_version}/php.ini",
+      "php_dir"  => pear_path,
+      "doc_dir"  => pear_path/"doc",
+      "ext_dir"  => pecl_path/php_basename,
+      "bin_dir"  => opt_bin,
+      "data_dir" => pear_path/"data",
+      "cfg_dir"  => pear_path/"cfg",
+      "www_dir"  => pear_path/"htdocs",
+      "man_dir"  => HOMEBREW_PREFIX/"share/man",
+      "test_dir" => pear_path/"test",
+      "php_bin"  => opt_bin/"php",
     }.each do |key, value|
       value.mkpath if /(?<!bin|man)_dir$/.match?(key)
       system bin/"pear", "config-set", key, value, "system"
@@ -327,8 +327,8 @@ class ValetPhpAT56 < Formula
   end
 
   test do
-    assert_match /^Zend OPcache$/, shell_output("#{bin}/php -i"),
-      "Zend OPCache extension not loaded"
+    assert_match(/^Zend OPcache$/, shell_output("#{bin}/php -i"),
+      "Zend OPCache extension not loaded")
     # Test related to libxml2 and
     # https://github.com/Homebrew/homebrew-core/issues/28398
     assert_includes MachO::Tools.dylibs("#{bin}/php"),
@@ -337,8 +337,8 @@ class ValetPhpAT56 < Formula
     system "#{bin}/phpdbg", "-V"
     system "#{bin}/php-cgi", "-m"
     # Prevent SNMP extension to be added
-    assert_no_match /^snmp$/, shell_output("#{bin}/php -m"),
-      "SNMP extension doesn't work reliably with Homebrew on High Sierra"
+    assert_no_match(/^snmp$/, shell_output("#{bin}/php -m"),
+      "SNMP extension doesn't work reliably with Homebrew on High Sierra")
     begin
       require "socket"
 
