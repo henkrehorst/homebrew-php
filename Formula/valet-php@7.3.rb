@@ -7,8 +7,8 @@ class ValetPhpAT73 < Formula
 
   bottle do
     root_url "https://dl.bintray.com/henkrehorst/valet-php"
-    sha256 "48b5ac32dc15c6d163bf7cd49a97b637f9092fd1d1874d33a8d449a06686ec0d" => :mojave
-    sha256 "441f28d96970a41b3b0406792f15b6a7312080d129f091b76f1aca0b76ac06e1" => :catalina
+    sha256 mojave:   "48b5ac32dc15c6d163bf7cd49a97b637f9092fd1d1874d33a8d449a06686ec0d"
+    sha256 catalina: "441f28d96970a41b3b0406792f15b6a7312080d129f091b76f1aca0b76ac06e1"
   end
 
   keg_only :versioned_formula
@@ -193,9 +193,9 @@ class ValetPhpAT73 < Formula
     inreplace "php.ini-development", ";pcre.jit=1", "pcre.jit=0"
 
     config_files = {
-        "php.ini-development"   => "php.ini",
-        "sapi/fpm/php-fpm.conf" => "php-fpm.conf",
-        "sapi/fpm/www.conf"     => "php-fpm.d/www.conf",
+      "php.ini-development"   => "php.ini",
+      "sapi/fpm/php-fpm.conf" => "php-fpm.conf",
+      "sapi/fpm/www.conf"     => "php-fpm.d/www.conf",
     }
     config_files.each_value do |dst|
       dst_default = config_path/"#{dst}.default"
@@ -212,14 +212,14 @@ class ValetPhpAT73 < Formula
   def post_install
     pear_prefix = pkgshare/"pear"
     pear_files = %W[
-    #{pear_prefix}/.depdblock
+      #{pear_prefix}/.depdblock
       #{pear_prefix}/.filemap
       #{pear_prefix}/.depdb
       #{pear_prefix}/.lock
     ]
 
     %W[
-    #{pear_prefix}/.channels
+      #{pear_prefix}/.channels
       #{pear_prefix}/.channels/.alias
     ].each do |f|
       chmod 0755, f
@@ -239,17 +239,17 @@ class ValetPhpAT73 < Formula
     pear_path = HOMEBREW_PREFIX/"share/pear@#{php_version}"
     cp_r pkgshare/"pear/.", pear_path
     {
-        "php_ini"  => etc/"valet-php/#{php_version}/php.ini",
-        "php_dir"  => pear_path,
-        "doc_dir"  => pear_path/"doc",
-        "ext_dir"  => pecl_path/php_basename,
-        "bin_dir"  => opt_bin,
-        "data_dir" => pear_path/"data",
-        "cfg_dir"  => pear_path/"cfg",
-        "www_dir"  => pear_path/"htdocs",
-        "man_dir"  => HOMEBREW_PREFIX/"share/man",
-        "test_dir" => pear_path/"test",
-        "php_bin"  => opt_bin/"php",
+      "php_ini"  => etc/"valet-php/#{php_version}/php.ini",
+      "php_dir"  => pear_path,
+      "doc_dir"  => pear_path/"doc",
+      "ext_dir"  => pecl_path/php_basename,
+      "bin_dir"  => opt_bin,
+      "data_dir" => pear_path/"data",
+      "cfg_dir"  => pear_path/"cfg",
+      "www_dir"  => pear_path/"htdocs",
+      "man_dir"  => HOMEBREW_PREFIX/"share/man",
+      "test_dir" => pear_path/"test",
+      "php_bin"  => opt_bin/"php",
     }.each do |key, value|
       value.mkpath if /(?<!bin|man)_dir$/.match?(key)
       system bin/"pear", "config-set", key, value, "system"
@@ -324,8 +324,8 @@ class ValetPhpAT73 < Formula
   end
 
   test do
-    assert_match /^Zend OPcache$/, shell_output("#{bin}/php -i"),
-      "Zend OPCache extension not loaded"
+    assert_match(/^Zend OPcache$/, shell_output("#{bin}/php -i"),
+      "Zend OPCache extension not loaded")
     # Test related to libxml2 and
     # https://github.com/Homebrew/homebrew-core/issues/28398
     assert_includes MachO::Tools.dylibs("#{bin}/php"),
@@ -334,8 +334,8 @@ class ValetPhpAT73 < Formula
     system "#{bin}/phpdbg", "-V"
     system "#{bin}/php-cgi", "-m"
     # Prevent SNMP extension to be added
-    assert_no_match /^snmp$/, shell_output("#{bin}/php -m"),
-      "SNMP extension doesn't work reliably with Homebrew on High Sierra"
+    assert_no_match(/^snmp$/, shell_output("#{bin}/php -m"),
+      "SNMP extension doesn't work reliably with Homebrew on High Sierra")
     begin
       port = free_port
       port_fpm = free_port
