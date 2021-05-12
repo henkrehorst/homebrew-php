@@ -7,8 +7,7 @@ class ValetPhpAT70 < Formula
 
   bottle do
     root_url "https://dl.bintray.com/henkrehorst/valet-php"
-    sha256 mojave:   "7479c257ce82dbe48a5d49f008be91c457fc8e202350034e1e79211742fd4da2"
-    sha256 catalina: "a6d0f6fefc5cbd6139dd7ed5f39431375c2302011e7c3bbd4443834313103f21"
+    sha256 sierra:   "975e1f54eddc19f3a39416822c240135c67467e8a4f636b53039eb1c24e3136d"
   end
 
   keg_only :versioned_formula
