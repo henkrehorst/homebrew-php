@@ -130,7 +130,7 @@ class ValetPhpAT74 < Formula
       --with-apxs2=#{Formula["httpd"].opt_bin}/apxs
       --with-bz2#{headers_path}
       --with-curl
-      --with-external-gd
+      --with-gd
       --with-external-pcre
       --with-ffi
       --with-fpm-user=_www
