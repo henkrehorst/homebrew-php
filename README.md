@@ -1,3 +1,5 @@
+> :warning: DEPRECATED! View the [valet-plus](https://github.com/weprovide/valet-plus/blob/3.x/README.MD) readme for upgrade steps to [shivammathur/php](https://github.com/shivammathur/homebrew-php).
+
 # Homebrew-php
 
 To add tap, run `brew tap henkrehorst/homebrew-php`
