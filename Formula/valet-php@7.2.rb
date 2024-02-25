@@ -1,8 +1,10 @@
 class ValetPhpAT72 < Formula
   desc "General-purpose scripting language"
   homepage "https://www.php.net/"
-  url "https://www.php.net/distributions/php-7.2.34.tar.xz"
-  sha256 "409e11bc6a2c18707dfc44bc61c820ddfd81e17481470f3405ee7822d8379903"
+  url "https://github.com/shivammathur/php-src-backports/archive/68d7838b27f3612b97332f10e65847833c6461ca.tar.gz"
+  version "7.2.34"
+  sha256 "9079fdcae95ff11c52152ae5499a4b2f5933170a30b19083ad5b10fb35d6fa71"
+  license "PHP-3.01"
   revision 4
 
   bottle do
@@ -12,8 +14,16 @@ class ValetPhpAT72 < Formula
 
   keg_only :versioned_formula
 
+  # This PHP version is not supported upstream as of 2020-11-30.
+  # Although, this was built with back-ported security patches,
+  # we recommended to use a currently supported PHP version.
+  # For more details, refer to https://www.php.net/eol.php
+  deprecate! date: "2020-11-30", because: :deprecated_upstream
+
+  depends_on "bison" => :build
   depends_on "httpd" => [:build, :test]
   depends_on "pkg-config" => :build
+  depends_on "re2c" => :build
   depends_on "xz" => :build
   depends_on "apr"
   depends_on "apr-util"
@@ -39,6 +49,12 @@ class ValetPhpAT72 < Formula
   depends_on "tidy-html5"
   depends_on "unixodbc"
   depends_on "webp"
+
+  uses_from_macos "bzip2"
+  uses_from_macos "libedit"
+  uses_from_macos "libxml2"
+  uses_from_macos "libxslt"
+  uses_from_macos "zlib"
 
   # PHP build system incorrectly links system libraries
   # see https://github.com/php/php-src/pull/3472
@@ -170,6 +186,11 @@ class ValetPhpAT72 < Formula
       --with-xsl#{headers_path}
       --with-zlib#{headers_path}
     ]
+
+
+    args << "--without-ldap-sasl"
+    args << "--without-ndbm"
+    args << "--without-gdbm"
 
     system "./configure", *args
     system "make"
