@@ -43,6 +43,13 @@ class ValetPhpAT72 < Formula
   # PHP build system incorrectly links system libraries
   # see https://github.com/php/php-src/pull/3472
   patch :DATA
+  
+  # PHP build system ICU70 fails
+  # see https://github.com/php/php-src/pull/7596
+  patch do
+    url "https://raw.githubusercontent.com/henkrehorst/homebrew-php/master/Patches/php71-icu70.patch"
+    sha256 "9f604be7b5021f5f840229392b1ca4c8db35f48f5f1a4085b533bf97985cfd5f"
+  end
 
   def install
     # Ensure that libxml2 will be detected correctly in older MacOS
